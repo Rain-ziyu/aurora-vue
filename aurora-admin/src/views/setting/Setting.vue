@@ -5,7 +5,7 @@
         <div class="info-container">
           <el-upload
             class="avatar-uploader"
-            action="/api/users/avatar"
+            action="/admin/users/avatar"
             :show-file-list="false"
             :headers="headers"
             :on-success="updateAvatar">
@@ -77,7 +77,7 @@ export default {
   methods: {
     handleClick(tab) {
       if (tab.index == 2 && this.notice == '') {
-        this.axios.get('/api/admin/notice').then(({ data }) => {
+        this.axios.get('/admin/notice').then(({ data }) => {
           this.notice = data.data
         })
       }
@@ -95,7 +95,7 @@ export default {
         this.$message.error('昵称不能为空')
         return false
       }
-      this.axios.put('/api/users/info', this.infoForm).then(({ data }) => {
+      this.axios.put('/admin/users/info', this.infoForm).then(({ data }) => {
         if (data.success) {
           this.$notify.success({
             title: '成功',
@@ -127,7 +127,7 @@ export default {
         this.$message.error('两次密码输入不一致')
         return false
       }
-      this.axios.put('/api/admin/users/password', this.passwordForm).then(({ data }) => {
+      this.axios.put('/admin/users/password', this.passwordForm).then(({ data }) => {
         if (data.success) {
           this.passwordForm.oldPassword = ''
           this.passwordForm.newPassword = ''

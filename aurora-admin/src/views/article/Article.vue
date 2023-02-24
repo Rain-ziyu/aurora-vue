@@ -92,7 +92,7 @@
           <el-upload
             class="upload-cover"
             drag
-            action="/api/admin/articles/images"
+            action="/admin/articles/images"
             multiple
             :headers="headers"
             :before-upload="beforeUpload"
@@ -145,7 +145,7 @@ export default {
     const arr = path.split('/')
     const articleId = arr[2]
     if (articleId) {
-      this.axios.get('/api/admin/articles/' + articleId).then(({ data }) => {
+      this.axios.get('/admin/articles/' + articleId).then(({ data }) => {
         this.article = data.data
       })
     } else {
@@ -196,12 +196,12 @@ export default {
   },
   methods: {
     listCategories() {
-      this.axios.get('/api/admin/categories/search').then(({ data }) => {
+      this.axios.get('/admin/categories/search').then(({ data }) => {
         this.categorys = data.data
       })
     },
     listTags() {
-      this.axios.get('/api/admin/tags/search').then(({ data }) => {
+      this.axios.get('/admin/tags/search').then(({ data }) => {
         this.tagList = data.data
       })
     },
@@ -236,14 +236,14 @@ export default {
       var formdata = new FormData()
       if (file.size / 1024 < this.config.UPLOAD_SIZE) {
         formdata.append('file', file)
-        this.axios.post('/api/admin/articles/images', formdata).then(({ data }) => {
+        this.axios.post('/admin/articles/images', formdata).then(({ data }) => {
           this.$refs.md.$img2Url(pos, data.data)
         })
       } else {
         imageConversion.compressAccurately(file, this.config.UPLOAD_SIZE).then((res) => {
           formdata.append('file', new window.File([res], file.name, { type: file.type }))
-          this.axios.post('/api/admin/articles/images', formdata).then(({ data }) => {
-            
+          this.axios.post('/admin/articles/images', formdata).then(({ data }) => {
+
             this.$refs.md.$img2Url(pos, data.data)
           })
         })
@@ -259,7 +259,7 @@ export default {
         return false
       }
       this.article.status = 3
-      this.axios.post('/api/admin/articles', this.article).then(({ data }) => {
+      this.axios.post('/admin/articles', this.article).then(({ data }) => {
         if (data.success) {
           if (this.article.id === null) {
             this.$store.commit('removeTab', '发布文章')
@@ -302,7 +302,7 @@ export default {
         this.$message.error('文章封面不能为空')
         return false
       }
-      this.axios.post('/api/admin/articles', this.article).then(({ data }) => {
+      this.axios.post('/admin/articles', this.article).then(({ data }) => {
         if (data.success) {
           if (this.article.id === null) {
             this.$store.commit('removeTab', '发布文章')
@@ -332,7 +332,7 @@ export default {
         this.article.articleContent.trim() != '' &&
         this.article.id != null
       ) {
-        this.axios.post('/api/admin/articles', this.article).then(({ data }) => {
+        this.axios.post('/admin/articles', this.article).then(({ data }) => {
           if (data.success) {
             this.$notify.success({
               title: '成功',
@@ -352,7 +352,7 @@ export default {
     },
     searchCategories(keywords, cb) {
       this.axios
-        .get('/api/admin/categories/search', {
+        .get('/admin/categories/search', {
           params: {
             keywords: keywords
           }
@@ -382,7 +382,7 @@ export default {
     },
     searchTags(keywords, cb) {
       this.axios
-        .get('/api/admin/tags/search', {
+        .get('/admin/tags/search', {
           params: {
             keywords: keywords
           }

@@ -67,7 +67,7 @@
             drag
             :headers="headers"
             :before-upload="beforeUpload"
-            action="/api/admin/photos/albums/upload"
+            action="/admin/photos/albums/upload"
             multiple
             :on-success="uploadCover">
             <i class="el-icon-upload" v-if="albumForum.albumCover == ''" />
@@ -150,7 +150,7 @@ export default {
     },
     listAlbums() {
       this.axios
-        .get('/api/admin/photos/albums', {
+        .get('/admin/photos/albums', {
           params: {
             current: this.current,
             size: this.size,
@@ -176,7 +176,7 @@ export default {
         this.$message.error('相册封面不能为空')
         return false
       }
-      this.axios.post('/api/admin/photos/albums', this.albumForum).then(({ data }) => {
+      this.axios.post('/admin/photos/albums', this.albumForum).then(({ data }) => {
         if (data.success) {
           this.$notify.success({
             title: '成功',
@@ -217,7 +217,7 @@ export default {
       }
     },
     deleteAlbum() {
-      this.axios.delete('/api/admin/photos/albums/' + this.albumForum.id).then(({ data }) => {
+      this.axios.delete('/admin/photos/albums/' + this.albumForum.id).then(({ data }) => {
         if (data.success) {
           this.$notify.success({
             title: '成功',

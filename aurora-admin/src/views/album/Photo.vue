@@ -79,7 +79,7 @@
       <div class="upload-container">
         <el-upload
           v-show="uploads.length > 0"
-          action="/api/admin/photos/upload"
+          action="/admin/photos/upload"
           list-type="picture-card"
           :file-list="uploads"
           multiple
@@ -93,7 +93,7 @@
           <el-upload
             v-show="uploads.length == 0"
             drag
-            action="/api/admin/photos/upload"
+            action="/admin/photos/upload"
             multiple
             :headers="headers"
             :before-upload="beforeUpload"
@@ -206,19 +206,19 @@ export default {
   },
   methods: {
     getAlbumInfo() {
-      this.axios.get('/api/admin/photos/albums/' + this.$route.params.albumId + '/info').then(({ data }) => {
+      this.axios.get('/admin/photos/albums/' + this.$route.params.albumId + '/info').then(({ data }) => {
         this.albumInfo = data.data
       })
     },
     listAlbums() {
-      this.axios.get('/api/admin/photos/albums/info').then(({ data }) => {
+      this.axios.get('/admin/photos/albums/info').then(({ data }) => {
         this.albumList = data.data
         console.log(this.albumList)
       })
     },
     listPhotos() {
       this.axios
-        .get('/api/admin/photos', {
+        .get('/admin/photos', {
           params: {
             current: this.current,
             size: this.size,
@@ -246,7 +246,7 @@ export default {
         photoUrls.push(item.url)
       })
       this.axios
-        .post('/api/admin/photos', {
+        .post('/admin/photos', {
           albumId: this.$route.params.albumId,
           photoUrls: photoUrls
         })
@@ -273,7 +273,7 @@ export default {
         this.$message.error('照片名称不能为空')
         return false
       }
-      this.axios.put('/api/admin/photos', this.photoForm).then(({ data }) => {
+      this.axios.put('/admin/photos', this.photoForm).then(({ data }) => {
         if (data.success) {
           this.$notify.success({
             title: '成功',
@@ -291,7 +291,7 @@ export default {
     },
     updatePhotoAlbum() {
       this.axios
-        .put('/api/admin/photos/album', {
+        .put('/admin/photos/album', {
           albumId: this.albumId,
           photoIds: this.selectphotoIds
         })
@@ -352,7 +352,7 @@ export default {
       } else {
         param = { ids: [id], isDelete: 1 }
       }
-      this.axios.put('/api/admin/photos/delete', param).then(({ data }) => {
+      this.axios.put('/admin/photos/delete', param).then(({ data }) => {
         if (data.success) {
           this.$notify.success({
             title: '成功',

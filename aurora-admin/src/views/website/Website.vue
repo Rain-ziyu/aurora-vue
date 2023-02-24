@@ -6,7 +6,7 @@
           <el-form-item label="作者头像">
             <el-upload
               class="avatar-uploader"
-              action="/api/admin/config/images"
+              action="/admin/config/images"
               :headers="headers"
               :show-file-list="false"
               :before-upload="beforeUpload"
@@ -18,7 +18,7 @@
           <el-form-item label="网站logo">
             <el-upload
               class="avatar-uploader"
-              action="/api/admin/config/images"
+              action="/admin/config/images"
               :headers="headers"
               :show-file-list="false"
               :before-upload="beforeUpload"
@@ -120,7 +120,7 @@
               <el-form-item label="用户头像">
                 <el-upload
                   class="avatar-uploader"
-                  action="/api/admin/config/images"
+                  action="/admin/config/images"
                   :headers="headers"
                   :show-file-list="false"
                   :before-upload="beforeUpload"
@@ -134,7 +134,7 @@
               <el-form-item label="游客头像">
                 <el-upload
                   class="avatar-uploader"
-                  action="/api/admin/config/images"
+                  action="/admin/config/images"
                   :headers="headers"
                   :show-file-list="false"
                   :before-upload="beforeUpload"
@@ -168,7 +168,7 @@
               <el-form-item label="微信收款码">
                 <el-upload
                   class="avatar-uploader"
-                  action="/api/admin/config/images"
+                  action="/admin/config/images"
                   :headers="headers"
                   :show-file-list="false"
                   :before-upload="beforeUpload"
@@ -182,7 +182,7 @@
               <el-form-item label="支付宝收款码">
                 <el-upload
                   class="avatar-uploader"
-                  action="/api/admin/config/images"
+                  action="/admin/config/images"
                   :headers="headers"
                   :show-file-list="false"
                   :before-upload="beforeUpload"
@@ -218,7 +218,7 @@ export default {
   },
   methods: {
     getWebsiteConfig() {
-      this.axios.get('/api/admin/website/config').then(({ data }) => {
+      this.axios.get('/admin/website/config').then(({ data }) => {
         this.websiteConfigForm = data.data
       })
     },
@@ -251,7 +251,7 @@ export default {
       })
     },
     updateWebsiteConfig() {
-      this.axios.put('/api/admin/website/config', this.websiteConfigForm).then(({ data }) => {
+      this.axios.put('/admin/website/config', this.websiteConfigForm).then(({ data }) => {
         if (data.success) {
           this.$notify.success({
             title: '成功',

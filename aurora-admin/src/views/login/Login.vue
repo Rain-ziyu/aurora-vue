@@ -51,9 +51,9 @@ export default {
                  "password":that.loginForm.password
               }
               // 修改登陆之后获取用户信息
-              that.axios.post('/api/login', param).then(({ data }) => {
+              that.axios.post('/admin/login', param).then(({ data }) => {
                 if (data.success) {
-                  axios.get('/api/users/info').then(({data})=>{
+                  that.axios.get('/admin/users/info').then(({data})=>{
                     that.$store.commit('login', data.data)
                     generaMenu()
                     that.$message.success('登录成功')

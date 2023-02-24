@@ -80,7 +80,7 @@ export default {
   methods: {
     listPhotos() {
       this.axios
-        .get('/api/admin/photos', {
+        .get('/admin/photos', {
           params: {
             current: this.current,
             size: this.size,
@@ -108,7 +108,7 @@ export default {
       } else {
         param = { ids: [id], isDelete: 0 }
       }
-      this.axios.put('/api/admin/photos/delete', param).then(({ data }) => {
+      this.axios.put('/admin/photos/delete', param).then(({ data }) => {
         if (data.success) {
           this.$notify.success({
             title: '成功',
@@ -125,7 +125,7 @@ export default {
       this.batchDeletePhoto = false
     },
     deletePhotos() {
-      this.axios.delete('/api/admin/photos', { data: this.selectPhotoIds }).then(({ data }) => {
+      this.axios.delete('/admin/photos', { data: this.selectPhotoIds }).then(({ data }) => {
         if (data.success) {
           this.$notify.success({
             title: '成功',

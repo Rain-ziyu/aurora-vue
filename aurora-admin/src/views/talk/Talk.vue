@@ -6,7 +6,7 @@
       <div class="operation-wrapper">
         <div class="left-wrapper">
           <el-upload
-            action="/api/admin/talks/images"
+            action="/admin/talks/images"
             multiple
             :headers="headers"
             :before-upload="beforeUpload"
@@ -38,7 +38,7 @@
       <el-upload
         class="talk-image-upload"
         v-show="uploads.length > 0"
-        action="/api/admin/talks/images"
+        action="/admin/talks/images"
         list-type="picture-card"
         multiple
         :headers="headers"
@@ -61,7 +61,7 @@ export default {
   },
   created() {
     if (this.$route.params.talkId) {
-      this.axios.get('/api/admin/talks/' + this.$route.params.talkId).then(({ data }) => {
+      this.axios.get('/admin/talks/' + this.$route.params.talkId).then(({ data }) => {
         this.talk = data.data
         if (data.data.imgs) {
           data.data.imgs.forEach((item) => {
@@ -126,7 +126,7 @@ export default {
       } else {
         this.talk.images = ''
       }
-      this.axios.post('/api/admin/talks', this.talk).then(({ data }) => {
+      this.axios.post('/admin/talks', this.talk).then(({ data }) => {
         if (data.success) {
           this.$refs.editor.clear()
           this.uploads = []

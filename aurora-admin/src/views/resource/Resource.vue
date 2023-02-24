@@ -118,7 +118,7 @@ export default {
   methods: {
     listResources() {
       this.axios
-        .get('/api/admin/resources', {
+        .get('/admin/resources', {
           params: {
             keywords: this.keywords
           }
@@ -129,7 +129,7 @@ export default {
         })
     },
     changeResource(resource) {
-      this.axios.post('/api/admin/resources', resource).then(({ data }) => {
+      this.axios.post('/admin/resources', resource).then(({ data }) => {
         if (data.success) {
           this.$notify.success({
             title: '成功',
@@ -171,7 +171,7 @@ export default {
       this.addResource = true
     },
     deleteResource(id) {
-      this.axios.delete('/api/admin/resources/' + id).then(({ data }) => {
+      this.axios.delete('/admin/resources/' + id).then(({ data }) => {
         if (data.success) {
           this.$notify.success({
             title: '成功',
@@ -191,7 +191,7 @@ export default {
         this.$message.error('资源名不能为空')
         return false
       }
-      this.axios.post('/api/admin/resources', this.resourceForm).then(({ data }) => {
+      this.axios.post('/admin/resources', this.resourceForm).then(({ data }) => {
         if (data.success) {
           this.$notify.success({
             title: '成功',

@@ -139,7 +139,7 @@ export default {
     },
     listLogs() {
       this.axios
-        .get('/api/admin/exception/logs', {
+        .get('/admin/exception/logs', {
           params: {
             current: this.current,
             size: this.size,
@@ -159,7 +159,7 @@ export default {
       } else {
         param = { data: this.logIds }
       }
-      this.axios.delete('/api/admin/exception/logs', param).then(({ data }) => {
+      this.axios.delete('/admin/exception/logs', param).then(({ data }) => {
         if (data.success) {
           this.$notify.success({
             title: '成功',

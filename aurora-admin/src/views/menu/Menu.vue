@@ -151,7 +151,7 @@ export default {
   methods: {
     listMenus() {
       this.axios
-        .get('/api/admin/menus', {
+        .get('/admin/menus', {
           params: {
             keywords: this.keywords
           }
@@ -209,7 +209,7 @@ export default {
         id: menu.id,
         isHidden: menu.isHidden
       }
-      this.axios.put('/api/admin/menus/isHidden', params).then(({ data }) => {
+      this.axios.put('/admin/menus/isHidden', params).then(({ data }) => {
         if (data.success) {
           this.$notify.success({
             title: '成功',
@@ -240,7 +240,7 @@ export default {
         this.$message.error('菜单访问路径不能为空')
         return false
       }
-      this.axios.post('/api/admin/menus', this.menuForm).then(({ data }) => {
+      this.axios.post('/admin/menus', this.menuForm).then(({ data }) => {
         if (data.success) {
           this.$notify.success({
             title: '成功',
@@ -257,7 +257,7 @@ export default {
       })
     },
     deleteMenu(id) {
-      this.axios.delete('/api/admin/menus/' + id).then(({ data }) => {
+      this.axios.delete('/admin/menus/' + id).then(({ data }) => {
         if (data.success) {
           this.$notify.success({
             title: '成功',

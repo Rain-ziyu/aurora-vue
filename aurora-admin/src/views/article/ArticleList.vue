@@ -38,7 +38,7 @@
         批量导出
       </el-button>
       <el-upload
-        action="/api/admin/articles/import"
+        action="/admin/articles/import"
         multiple
         :limit="9"
         :show-file-list="false"
@@ -291,7 +291,7 @@ export default {
         param.ids = this.articleIds
       }
       param.isDelete = this.isDelete == 0 ? 1 : 0
-      this.axios.put('/api/admin/articles', param).then(({ data }) => {
+      this.axios.put('/admin/articles', param).then(({ data }) => {
         if (data.success) {
           this.$notify.success({
             title: '成功',
@@ -314,7 +314,7 @@ export default {
       } else {
         param = { data: [id] }
       }
-      this.axios.delete('/api/admin/articles/delete', param).then(({ data }) => {
+      this.axios.delete('/admin/articles/delete', param).then(({ data }) => {
         if (data.success) {
           this.$notify.success({
             title: '成功',
@@ -337,7 +337,7 @@ export default {
       } else {
         param = [id]
       }
-      this.axios.post('/api/admin/articles/export', param).then(({ data }) => {
+      this.axios.post('/admin/articles/export', param).then(({ data }) => {
         if (data.success) {
           this.$notify.success({
             title: '成功',
@@ -417,7 +417,7 @@ export default {
     },
     changeTopAndFeatured(article) {
       this.axios
-        .put('/api/admin/articles/topAndFeatured', {
+        .put('/admin/articles/topAndFeatured', {
           id: article.id,
           isTop: article.isTop,
           isFeatured: article.isFeatured
@@ -439,7 +439,7 @@ export default {
     },
     listArticles() {
       this.axios
-        .get('/api/admin/articles', {
+        .get('/admin/articles', {
           params: {
             current: this.current,
             size: this.size,
@@ -458,12 +458,12 @@ export default {
         })
     },
     listCategories() {
-      this.axios.get('/api/admin/categories/search').then(({ data }) => {
+      this.axios.get('/admin/categories/search').then(({ data }) => {
         this.categories = data.data
       })
     },
     listTags() {
-      this.axios.get('/api/admin/tags/search').then(({ data }) => {
+      this.axios.get('/admin/tags/search').then(({ data }) => {
         this.tags = data.data
       })
     }

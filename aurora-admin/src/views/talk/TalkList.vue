@@ -89,7 +89,7 @@ export default {
     },
     listTalks() {
       this.axios
-        .get('/api/admin/talks', {
+        .get('/admin/talks', {
           params: {
             current: this.current,
             size: this.size,
@@ -124,7 +124,7 @@ export default {
       this.listTalks()
     },
     deleteTalk() {
-      this.axios.delete('/api/admin/talks', { data: [this.talkId] }).then(({ data }) => {
+      this.axios.delete('/admin/talks', { data: [this.talkId] }).then(({ data }) => {
         if (data.success) {
           this.$notify.success({
             title: '成功',

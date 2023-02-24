@@ -197,7 +197,7 @@ export default {
         param.ids = this.commentIds
       }
       param.isReview = 1
-      this.axios.put('/api/admin/comments/review', param).then(({ data }) => {
+      this.axios.put('/admin/comments/review', param).then(({ data }) => {
         if (data.success) {
           this.$notify.success({
             title: '成功',
@@ -219,7 +219,7 @@ export default {
       } else {
         param = { data: [id] }
       }
-      this.axios.delete('/api/admin/comments', param).then(({ data }) => {
+      this.axios.delete('/admin/comments', param).then(({ data }) => {
         if (data.success) {
           this.$notify.success({
             title: '成功',
@@ -237,7 +237,7 @@ export default {
     },
     listComments() {
       this.axios
-        .get('/api/admin/comments', {
+        .get('/admin/comments', {
           params: {
             current: this.current,
             size: this.size,

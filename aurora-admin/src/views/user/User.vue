@@ -152,7 +152,7 @@ export default {
       this.listUsers()
     },
     changeDisable(user) {
-      this.axios.put('/api/admin/users/disable', {
+      this.axios.put('/admin/users/disable', {
         id: user.userInfoId,
         isDisable: user.isDisable
       })
@@ -168,7 +168,7 @@ export default {
     editUserRole() {
       this.userForm.roleIds = this.roleIds
       console.log(this.userForm)
-      this.axios.put('/api/admin/users/role', this.userForm).then(({ data }) => {
+      this.axios.put('/admin/users/role', this.userForm).then(({ data }) => {
         if (data.success) {
           this.$notify.success({
             title: '成功',
@@ -186,7 +186,7 @@ export default {
     },
     listUsers() {
       this.axios
-        .get('/api/admin/users', {
+        .get('/admin/users', {
           params: {
             current: this.current,
             size: this.size,
@@ -201,7 +201,7 @@ export default {
         })
     },
     listRoles() {
-      this.axios.get('/api/admin/users/role').then(({ data }) => {
+      this.axios.get('/admin/users/role').then(({ data }) => {
         this.userRoles = data.data
       })
     }

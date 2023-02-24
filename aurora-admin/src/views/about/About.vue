@@ -23,7 +23,7 @@ export default {
   },
   methods: {
     getAbout() {
-      this.axios.get('/api/about').then(({ data }) => {
+      this.axios.get('/admin/about').then(({ data }) => {
         this.aboutContent = data.data.content
       })
     },
@@ -31,13 +31,13 @@ export default {
       var formdata = new FormData()
       if (file.size / 1024 < this.config.UPLOAD_SIZE) {
         formdata.append('file', file)
-        this.axios.post('/api/admin/articles/images', formdata).then(({ data }) => {
+        this.axios.post('/admin/articles/images', formdata).then(({ data }) => {
           this.$refs.md.$img2Url(pos, data.data)
         })
       } else {
         imageConversion.compressAccurately(file, this.config.UPLOAD_SIZE).then((res) => {
           formdata.append('file', new window.File([res], file.name, { type: file.type }))
-          this.axios.post('/api/admin/articles/images', formdata).then(({ data }) => {
+          this.axios.post('/admin/articles/images', formdata).then(({ data }) => {
             this.$refs.md.$img2Url(pos, data.data)
           })
         })
@@ -45,7 +45,7 @@ export default {
     },
     updateAbout() {
       this.axios
-        .put('/api/admin/about', {
+        .put('/admin/about', {
           content: this.aboutContent
         })
         .then(({ data }) => {

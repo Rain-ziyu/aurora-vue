@@ -144,7 +144,7 @@ export default {
     },
     listLogs() {
       this.axios
-        .get('/api/admin/operation/logs', {
+        .get('/admin/operation/logs', {
           params: {
             current: this.current,
             size: this.size,
@@ -164,7 +164,7 @@ export default {
       } else {
         param = { data: this.logIds }
       }
-      this.axios.delete('/api/admin/operation/logs', param).then(({ data }) => {
+      this.axios.delete('/admin/operation/logs', param).then(({ data }) => {
         if (data.success) {
           this.$notify.success({
             title: '成功',

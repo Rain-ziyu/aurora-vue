@@ -76,7 +76,7 @@ export default {
   methods: {
     listOnlineUsers() {
       this.axios
-        .get('/api/admin/users/online', {
+        .get('/admin/users/online', {
           params: {
             current: this.current,
             size: this.size,
@@ -98,7 +98,7 @@ export default {
       this.listOnlineUsers()
     },
     removeOnlineUser(user) {
-      this.axios.delete('/api/admin/users/' + user.userInfoId + '/online').then(({ data }) => {
+      this.axios.delete('/admin/users/' + user.userInfoId + '/online').then(({ data }) => {
         if (data.success) {
           this.$notify.success({
             title: '成功',

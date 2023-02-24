@@ -304,7 +304,7 @@ export default {
       this.listJobs()
     },
     listJobGroups() {
-      this.axios.get('/api/admin/jobs/jobGroups').then(({ data }) => {
+      this.axios.get('/admin/jobs/jobGroups').then(({ data }) => {
         this.jobGroups = data.data
       })
     },
@@ -312,7 +312,7 @@ export default {
       this.searchParams.current = this.current
       this.searchParams.size = this.size
       this.axios
-        .get('/api/admin/jobs', {
+        .get('/admin/jobs', {
           params: this.searchParams
         })
         .then(({ data }) => {
@@ -333,7 +333,7 @@ export default {
     },
     changeStatus(job) {
       this.axios
-        .put('/api/admin/jobs/status', {
+        .put('/admin/jobs/status', {
           id: job.id,
           status: job.status
         })
@@ -359,7 +359,7 @@ export default {
       } else {
         param = { data: [id] }
       }
-      this.axios.delete('/api/admin/jobs', param).then(({ data }) => {
+      this.axios.delete('/admin/jobs', param).then(({ data }) => {
         if (data.success) {
           this.$notify.success({
             title: '成功',
@@ -388,7 +388,7 @@ export default {
     handleChange(jobId) {
       this.editOrUpdate = true
       this.title = '编辑任务'
-      this.axios.get('/api/admin/jobs/' + jobId).then(({ data }) => {
+      this.axios.get('/admin/jobs/' + jobId).then(({ data }) => {
         this.job = data.data
       })
       this.dialogFormVisible = true
@@ -398,7 +398,7 @@ export default {
     },
     handleEditOrUpdate() {
       if (this.editOrUpdate === true) {
-        this.axios.put('/api/admin/jobs', this.job).then(({ data }) => {
+        this.axios.put('/admin/jobs', this.job).then(({ data }) => {
           if (data.success) {
             this.$notify.success({
               title: '修改成功',
@@ -414,7 +414,7 @@ export default {
           this.dialogFormVisible = false
         })
       } else if (this.editOrUpdate === false) {
-        this.axios.post('/api/admin/jobs', this.job).then(({ data }) => {
+        this.axios.post('/admin/jobs', this.job).then(({ data }) => {
           if (data.success) {
             this.$notify.success({
               title: '添加成功',
@@ -451,7 +451,7 @@ export default {
         id: job.id,
         jobGroup: job.jobGroup
       }
-      this.axios.put('/api/admin/jobs/run', params).then(({ data }) => {
+      this.axios.put('/admin/jobs/run', params).then(({ data }) => {
         if (data.success) {
           this.$notify.success({
             title: '执行成功',

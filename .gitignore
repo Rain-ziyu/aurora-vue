@@ -1,3 +1,7 @@
+/aurora-admin/dist/
+/aurora-blog/dist/
+/aurora-admin/node_modules/
+/aurora-blog/node_modules/
 # Logs
 logs
 *.log

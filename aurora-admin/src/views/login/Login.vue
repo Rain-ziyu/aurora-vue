@@ -52,6 +52,8 @@ export default {
               }
               // 修改登陆之后获取用户信息
               that.axios.post('/admin/login', param).then(({ data }) => {
+                // 两次提交 第一次提交用于获取用户信息的token
+                that.$store.commit('login', data.data)
                 if (data.success) {
                   that.axios.get('/admin/users/info').then(({data})=>{
                     that.$store.commit('login', data.data)

@@ -12,7 +12,7 @@
           @uploaded="handleSuccess"
           trigger="#pick-avatar"
           :request-options="options"
-          upload-url="/api/users/avatar" />
+          upload-url="/user/users/avatar" />
         <el-form>
           <el-form-item model="userInfo" label="昵称:" class="mt-5">
             <el-input v-model="userInfo.nickname" />

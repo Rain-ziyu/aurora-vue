@@ -101,8 +101,7 @@
             <div class="el-upload__text" v-if="article.articleCover == ''">将文件拖到此处，或<em>点击上传</em></div>
             <img v-else :src="article.articleCover" width="360px" height="180px" />
           </el-upload>
-           <img src="http://prod.huayu.asia:9000/sofa-server/articles/11a2c5f0297a5e816975e25b53da379a.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=wwlhuayu%2F20230220%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20230220T053204Z&X-Amz-Expires=604800&X-Amz-SignedHeaders=host&X-Amz-Signature=98e1612575231fe6237586bcf76c7f20325f0c602f16f0643847441490cfcfe4" />
-          </el-form-item>
+            </el-form-item>
         <el-form-item label="置顶">
           <el-switch
             v-model="article.isTop"

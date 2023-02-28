@@ -54,7 +54,7 @@ router.beforeEach((to, from, next) => {
   NProgress.start()
   if (to.path == '/login') {
     next()
-  } else if (!store.state.userInfo) {
+  } else if (!store.state.userInfo||!store.state.userInfo.token) {
     next({ path: '/login' })
   } else {
     next()

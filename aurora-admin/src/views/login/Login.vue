@@ -54,8 +54,11 @@ export default {
               that.axios.post('/admin/login', param).then(({ data }) => {
                 // 两次提交 第一次提交用于获取用户信息的token
                 that.$store.commit('login', data.data)
+                const dat = data;
                 if (data.success) {
                   that.axios.get('/admin/users/info').then(({data})=>{
+                    data.data.token = dat.token;
+                    data.data.refreshToken = dat.refreshToken
                     that.$store.commit('login', data.data)
                     generaMenu()
                     that.$message.success('登录成功')

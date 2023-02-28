@@ -17,17 +17,19 @@
     </div>
     <el-table v-loading="loading" :data="users">
       <el-table-column type="selection" width="55" align="center" />
-      <el-table-column prop="avatar" label="头像" align="center" width="100">
+      <!-- 暂不展示头像
+         <el-table-column prop="avatar" label="头像" align="center" width="100">
         <template slot-scope="scope">
           <img :src="scope.row.avatar" width="40" height="40" />
         </template>
-      </el-table-column>
-      <el-table-column prop="nickname" label="昵称" align="center" />
+      </el-table-column> -->
+      <el-table-column prop="userId" label="用户id" align="center" />
+      <el-table-column prop="name" label="用户名" align="center" />
       <el-table-column prop="ipAddress" label="ip地址" align="center" />
       <el-table-column prop="ipSource" label="登录地址" align="center" width="200" />
       <el-table-column prop="browser" label="浏览器" align="center" width="160" />
       <el-table-column prop="os" label="操作系统" align="center" />
-      <el-table-column prop="lastLoginTime" label="登录时间" align="center" width="200">
+      <el-table-column prop="expireTime" label="认证过期时间" align="center" width="200">
         <template slot-scope="scope">
           <i class="el-icon-time" style="margin-right: 5px" />
           {{ scope.row.lastLoginTime | dateTime }}

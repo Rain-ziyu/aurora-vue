@@ -84,7 +84,8 @@
       <div class="dialog-title-container" slot="title">修改用户</div>
       <el-form label-width="60px" size="medium" :model="userForm">
         <el-form-item label="昵称">
-          <el-input v-model="userForm.nickname" style="width: 220px" />
+          <!-- 不允许管理员修改 开启禁用 -->
+          <el-input v-model="userForm.nickname" style="width: 220px" disabled />
         </el-form-item>
         <el-form-item label="角色">
           <el-checkbox-group v-model="roleIds">

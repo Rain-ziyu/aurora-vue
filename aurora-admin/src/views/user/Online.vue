@@ -32,7 +32,7 @@
       <el-table-column prop="expireTime" label="认证过期时间" align="center" width="200">
         <template slot-scope="scope">
           <i class="el-icon-time" style="margin-right: 5px" />
-          {{ scope.row.lastLoginTime | dateTime }}
+          {{ scope.row.expireTime | dateTime }}
         </template>
       </el-table-column>
       <el-table-column label="操作" align="center" width="150">

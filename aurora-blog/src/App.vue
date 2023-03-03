@@ -1,13 +1,11 @@
 <template>
   <div id="App-Wrapper" :class="[appWrapperClass, theme]" :style="wrapperStyle">
-
     <div
       id="App-Container"
       class="app-container max-w-10/12 lg:max-w-screen-2xl px-3 lg:px-8"
       @keydown.meta.k.stop.prevent=""
       tabindex="-1"
       :style="cssVariables">
-
       <HeaderMain />
       <div class="app-banner app-banner-image" :style="headerImage" />
       <div class="app-banner app-banner-screen" :style="headerBaseBackground" />
@@ -21,7 +19,7 @@
     </div>
     <div id="loading-bar-wrapper" :class="loadingBarClass"></div>
   </div>
-  
+
   <Footer id="footer" :style="cssVariables" />
   <div class="App-Mobile-sidebar" v-if="isMobile">
     <div id="App-Mobile-Profile" class="App-Mobile-wrapper">
@@ -34,12 +32,11 @@
   <teleport to="head">
     <title>{{ title }}</title>
   </teleport>
-
 </template>
 
 <script lang="ts">
 import { computed, defineComponent, onBeforeMount, onUnmounted, ref } from 'vue'
-import { useAppStore} from '@/stores/app'
+import { useAppStore } from '@/stores/app'
 import { useCommonStore } from '@/stores/common'
 import { useMetaStore } from '@/stores/meta'
 import HeaderMain from '@/components/Header/src/Header.vue'
@@ -49,6 +46,7 @@ import Dia from '@/components/Dia.vue'
 import AuroraNavigator from '@/components/AuroraNavigator.vue'
 import UserCenter from '@/components/UserCenter.vue'
 import api from './api/api'
+import { useUserStore } from './stores/user'
 
 export default defineComponent({
   name: 'App',
@@ -59,6 +57,19 @@ export default defineComponent({
     AuroraNavigator,
     MobileMenu,
     UserCenter
+  },
+  created() {
+    // 数据初始化 如果是新进入页面为UserStore加载用户数据
+      let userStore = useUserStore()
+      // 请求完整的用户信息
+      api.getCurrentUserInfo().then(({ data }) => {
+        if (data.success) {
+          userStore.userInfo = data.data
+        }else{
+          userStore.userInfo =""
+        }
+      })
+    
   },
   setup() {
     const appStore = useAppStore()

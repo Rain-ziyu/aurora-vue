@@ -35,7 +35,7 @@ export default defineComponent({
             if (data.success) {
               userStore.userInfo = data.data
               userStore.token = data.data.token
-              sessionStorage.setItem('token', data.data.token)
+              localStorage.setItem('token', data.data.token)
               proxy.$notify({
                 title: 'Success',
                 message: '登录成功',

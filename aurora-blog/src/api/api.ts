@@ -1,15 +1,24 @@
-import axios from 'axios'
+import axios, { CancelToken, CancelTokenSource } from 'axios'
 import { app } from '@/main'
-
+import CancelRequest from '@/api/cancel-request'
+let cancelRequest = new CancelRequest()
+const CancelToken = axios.CancelToken;
+let previousCancelToken = CancelToken.source();
 axios.interceptors.request.use((config: any) => {
-  config.headers['token'] = sessionStorage.getItem('token')
+  config.headers['token'] = localStorage.getItem('token')
   // 预留之后使用
-  config.headers['refreshToken'] = sessionStorage.getItem('refreshToken')
+  config.headers['refreshToken'] = localStorage.getItem('refreshToken')
+   // 在请求开始之前检查先前的请求，如果是重复请求，删除之前的
+  cancelRequest.removePendingRequest(config);
+   // 如果不存在就将当前请求添加到pendingRequest
+  cancelRequest.addPendingRequest(config,CancelToken);
   return config
 })
 
 axios.interceptors.response.use(
   (response) => {
+      // 移除成功请求记录
+    cancelRequest.removeRequestKey(response.config)
     switch (response.data.result) {
       case 1:
         app.config.globalProperties.$notify({
@@ -19,20 +28,35 @@ axios.interceptors.response.use(
         })
         break
       case 510:
+        // 如果token失效直接移除，之后不携带
+        localStorage.removeItem('token')
         app.config.globalProperties.$notify({
-          title: 'Error',
-          message: '用户未登录',
-          type: 'error'
+          title: '提示',
+          message: '您将以游客身份访问',
+          type: 'info'
         })
         break
     }
     return response
   },
   (error) => {
+    // 如果token失效,或者出现请求问题直接移除，之后不携带
+    localStorage.removeItem('token')
+      // 失败时也需要移除
+    cancelRequest.removeRequestKey(error.config || {} )
     return Promise.reject(error)
   }
 )
-export default {
+export default {  
+  getCancelToken: () => {
+    return CancelToken.source();
+  },
+  getPreviousCancelToken: () => {
+    return previousCancelToken;
+  },
+  setCurCancelToken: (cancelToken: CancelTokenSource) => {
+     previousCancelToken = cancelToken;
+  },
   getTopAndFeaturedArticles: () => {
     return axios.get('/user/articles/topAndFeatured')
   },
@@ -104,9 +128,12 @@ export default {
     return axios.post('/user/users/register', params)
   },
   searchArticles: (params: any) => {
-    return axios.get('/user/articles/search', {
-      params: params
-    })
+    // return axios.get('/user/articles/search', {
+    //   params: params
+    // })
+    return axios.get('/user/articles/search', 
+       params
+    )
   },
   getAlbums: () => {
     return axios.get('/user/photos/albums')
@@ -116,8 +143,9 @@ export default {
       params: params
     })
   },
+  // 增加/ 用户匹配后端服务
   getWebsiteConfig: () => {
-    return axios.get('/user')
+    return axios.get('/user/')
   },
   qqLogin: (params: any) => {
     return axios.post('/user/users/oauth/qq', params)

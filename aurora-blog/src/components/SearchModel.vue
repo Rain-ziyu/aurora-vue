@@ -368,15 +368,22 @@ export default defineComponent({
         handleLinkClick(searchResults.value[menuActiveIndex.value])
       }
     }
+
     const searchKeywords = (e: any) => {
+      // 获取上次请求的CancelToken并取消
+      api.getPreviousCancelToken().cancel("取消上次请求");
       if (e.target.value !== '') {
+        let source = api.getCancelToken()
         let params = {
-          keywords: e.target.value
+         params:{keywords: e.target.value} ,
+        //  为当前请求设置cancelToken标识
+         cancelToken: source.token
         }
+        // 设置当前的CurCancel 供下一次使用
+        api.setCurCancelToken(source)
         api.searchArticles(params).then(({ data }) => {
-          // 对比，防止第一次的请求返回的慢导致覆盖第二次输入
           searchResults.value = data.data
-          if (searchResults.value.length > 0&&params.keywords===keywords) {
+          if (searchResults.value.length > 0) {
             resetIndex(searchResults.value.length)
             isEmpty.value = false
           } else {
@@ -425,3 +432,7 @@ export default defineComponent({
   }
 })
 </script>
+
+function getCancelSource() {
+  throw new Error('Function not implemented.')
+}

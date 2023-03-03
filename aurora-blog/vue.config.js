@@ -7,13 +7,14 @@ module.exports = defineConfig({
   transpileDependencies: true,
   productionSourceMap: false,
   devServer: {
+    port:8082,
     proxy: {
-      '/api': {
-        // target: 'http://localhost:8080',
-        target: 'http://prod.huayu.asia',
+      '/user': {
+        target: 'http://localhost:8080',
+        // target: 'http://prod.huayu.asia',
         changeOrigin: true,
         pathRewrite: {
-          '^/api': ''
+          '^/user': '/user'
         }
       }
     }

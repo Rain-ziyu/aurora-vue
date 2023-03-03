@@ -16,7 +16,7 @@ export default defineComponent({
   setup(props) {
     return {
       url: toRefs(props).url,
-      default: 'https://static.linhaojun.top/config/52a81cd2772167b645569342e81ce312.jpg'
+      default: 'http://prod.huayu.asia:9000/sofa-server/articles/d4037812de011f713d613a6039856950.jpg'
     }
   }
 })

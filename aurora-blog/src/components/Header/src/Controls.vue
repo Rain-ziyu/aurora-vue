@@ -194,8 +194,9 @@ export default defineComponent({
           api.login(params).then(({ data }) => {
             if (data.success) {
               // 获取token
-              sessionStorage.setItem('token', data.data.token)
-              sessionStorage.setItem('refreshToken', data.data.refreshToken)
+              
+              localStorage.setItem('token', data.data.token)
+              localStorage.setItem('refreshToken', data.data.refreshToken)
               userStore.token = data.data.token
               // 请求完整的用户信息
               api.getCurrentUserInfo().then(({data})=>{
@@ -205,8 +206,8 @@ export default defineComponent({
                 message: '登录成功',
                 type: 'success'
               })
-              // 临时的刷新
-              location.reload()
+              // 临时的刷新  暂时可以不刷新了，因为即使登录之后页面跟登陆之前是一致的
+              // location.reload()
               reactiveDate.loginDialogVisible = false
               })
              
@@ -228,14 +229,14 @@ export default defineComponent({
           userStore.userInfo = ''
           userStore.token = ''
           userStore.accessArticles = []
-          sessionStorage.removeItem('token')
+          localStorage.removeItem('token')
           proxy.$notify({
             title: 'Success',
             message: '登出成功',
             type: 'success'
           })
-        // 临时的刷新
-        location.reload()
+        // 临时的刷新  暂时可以不刷新了，因为即使登录之后页面跟登陆之前是一致的
+        // location.reload()
         } else {
           proxy.$notify({
             title: 'Error',

@@ -1,6 +1,8 @@
 import axios, { CancelToken, CancelTokenSource } from 'axios'
 import { app } from '@/main'
 import CancelRequest from '@/api/cancel-request'
+import { useUserStore } from '@/stores/user';
+import api from '@/api/api'
 let cancelRequest = new CancelRequest()
 const CancelToken = axios.CancelToken;
 let previousCancelToken = CancelToken.source();
@@ -28,11 +30,15 @@ axios.interceptors.response.use(
         })
         break
       case 510:
-        // 如果token失效直接移除，之后不携带
+        
+        // 如果token失效直接移除，之后不携带 同步移除登录的用户信息
         localStorage.removeItem('token')
+        useUserStore().userInfo =""
+        // 保险起见再进行一次服务端注销
+        api.logout()
         app.config.globalProperties.$notify({
           title: '提示',
-          message: '您将以游客身份访问',
+          message: '您以游客身份访问',
           type: 'info'
         })
         break

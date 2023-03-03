@@ -374,8 +374,9 @@ export default defineComponent({
           keywords: e.target.value
         }
         api.searchArticles(params).then(({ data }) => {
+          // 对比，防止第一次的请求返回的慢导致覆盖第二次输入
           searchResults.value = data.data
-          if (searchResults.value.length > 0) {
+          if (searchResults.value.length > 0&&params.keywords===keywords) {
             resetIndex(searchResults.value.length)
             isEmpty.value = false
           } else {

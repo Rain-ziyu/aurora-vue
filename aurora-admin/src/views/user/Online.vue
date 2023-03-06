@@ -100,13 +100,13 @@ export default {
       this.listOnlineUsers()
     },
     removeOnlineUser(user) {
-      this.axios.delete('/admin/users/' + user.userInfoId + '/online').then(({ data }) => {
+      this.axios.delete('/admin/users/' + user.userId + '/online').then(({ data }) => {
         if (data.success) {
           this.$notify.success({
             title: '成功',
             message: data.message
           })
-          if (user.userInfoId == this.$store.state.userInfo.id) {
+          if (user.userId == this.$store.state.userInfo.id) {
             router.push({ path: '/login' })
             sessionStorage.removeItem('token')
           }

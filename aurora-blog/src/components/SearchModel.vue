@@ -101,6 +101,8 @@
               </ul>
             </section>
             <section v-else>
+              <span v-if="isLoading&&keywords.length > 0"  class="flex text-3xl animation-text" style="display:flex; justify-content: center;background-image: linear-gradient(90deg, #cccccc, #0fb6d6, #cccccc)">LOADING</span>
+              <div v-if="keywords.length > 0" style="text-align: center; color: #0fb6d6; height: 20px;">{{ t('settings.no-search') }}</div>
               <div class="search-hit-label">
                 {{ t('settings.recently-search') }}
               </div>
@@ -161,7 +163,7 @@
               <span class="search-label">{{ t('settings.searched-by') }}</span>
               <img
                 class="mr-1.5"
-                src="https://img-blog.csdnimg.cn/20210313122054101.png"
+                src="https://prod.huayu.asia:9000/picgo/202303061553369.png"
                 alt="ObsidianNext Logo"
                 height="20"
                 width="20" />
@@ -264,6 +266,7 @@ export default defineComponent({
     const menuActiveIndex = ref(0)
     const menuMaxIndex = ref(0)
     const isEmpty = ref(false)
+    const isLoading = ref(false)
     const { t } = useI18n()
     onMounted(() => {
       initSearch()
@@ -372,6 +375,7 @@ export default defineComponent({
     const searchKeywords = (e: any) => {
       // 获取上次请求的CancelToken并取消
       api.getPreviousCancelToken().cancel("取消上次请求");
+      isLoading.value = true;
       if (e.target.value !== '') {
         let source = api.getCancelToken()
         let params = {
@@ -389,6 +393,9 @@ export default defineComponent({
           } else {
             isEmpty.value = true
           }
+          
+        }).finally(()=>{
+          isLoading.value = false;
         })
       } else {
         isEmpty.value = false
@@ -420,6 +427,7 @@ export default defineComponent({
       searchResults,
       keywords,
       isEmpty,
+      isLoading,
       searchKeywords,
       recentResults,
       handleResetInput,

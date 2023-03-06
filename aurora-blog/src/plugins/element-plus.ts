@@ -13,12 +13,14 @@ import {
   ElInput,
   ElSwitch,
   ElButton,
-  ElDialog
+  ElDialog,
+  ElIcon
 } from 'element-plus'
 export const components: any[] = [
   ElNotification,
   ElDrawer,
   ElRow,
+  ElIcon,
   ElCol,
   ElCard,
   ElSpace,
@@ -37,6 +39,7 @@ export const plugins: any[] = [
   ElDrawer,
   ElRow,
   ElCol,
+  ElIcon,
   ElCard,
   ElSpace,
   ElAvatar,

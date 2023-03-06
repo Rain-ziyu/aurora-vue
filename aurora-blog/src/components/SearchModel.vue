@@ -102,7 +102,8 @@
             </section>
             <section v-else>
               <span v-if="isLoading&&keywords.length > 0"  class="flex text-3xl animation-text" style="display:flex; justify-content: center;background-image: linear-gradient(90deg, #cccccc, #0fb6d6, #cccccc)">LOADING</span>
-              <div v-else-if="keywords.length > 0" style="text-align: center; color: #0fb6d6; height: 20px;">{{ t('settings.no-search') }}</div>
+
+              <div v-else-if="keywords.length > 0&&isEmpty" style="text-align: center; color: #0fb6d6; height: 20px;">{{ t('settings.no-search') }}</div>
               <div class="search-hit-label">
                 {{ t('settings.recently-search') }}
               </div>
@@ -375,8 +376,9 @@ export default defineComponent({
     const searchKeywords = (e: any) => {
       // 获取上次请求的CancelToken并取消
       api.getPreviousCancelToken().cancel("取消上次请求");
-      isLoading.value = true;
+
       if (e.target.value !== '') {
+        isLoading.value = true;
         let source = api.getCancelToken()
         let params = {
          params:{keywords: e.target.value} ,
@@ -398,6 +400,7 @@ export default defineComponent({
           isLoading.value = false;
         })
       } else {
+        isLoading.value = false;
         isEmpty.value = false
         searchResults.value = []
         resetIndex(recentResults.value.length)

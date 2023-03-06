@@ -19,6 +19,7 @@ axios.interceptors.request.use((config: any) => {
 
 axios.interceptors.response.use(
   (response) => {
+    
       // 移除成功请求记录
     cancelRequest.removeRequestKey(response.config)
     switch (response.data.result) {
@@ -30,12 +31,12 @@ axios.interceptors.response.use(
         })
         break
       case 510:
-        
+
         // 如果token失效直接移除，之后不携带 同步移除登录的用户信息
         localStorage.removeItem('token')
         useUserStore().userInfo =""
-        // 保险起见再进行一次服务端注销
-        api.logout()
+        // 保险起见再进行一次服务端注销   实际上没必须要 如果服务端验证不通过 说明其token本就无效
+        // api.logout()
         app.config.globalProperties.$notify({
           title: '提示',
           message: '您以游客身份访问',

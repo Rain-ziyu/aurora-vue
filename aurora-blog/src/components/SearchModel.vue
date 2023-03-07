@@ -56,6 +56,7 @@
         <div id="Search-Dropdown" class="search-dropdown" v-if="searchResults !== null">
           <div>
             <section v-if="searchResults.length > 0">
+              <span v-if="isLoading&&keywords.length > 0"  class="flex text-3xl animation-text" style="display:flex; justify-content: center;background-image: linear-gradient(90deg, #cccccc, #0fb6d6, #cccccc)">LOADING</span>
               <div class="search-hit-label">Found {{ searchResults.length }} records</div>
               <ul id="search-menu">
                 <li
@@ -395,7 +396,7 @@ export default defineComponent({
           } else {
             isEmpty.value = true
           }
-          isLoading.value = false;
+                    isLoading.value = false;
         }).finally(()=>{
 
         })

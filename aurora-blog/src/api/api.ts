@@ -124,7 +124,7 @@ export default {
   sendValidationCode: (username: any) => {
     return axios.get('/user/users/code', {
       params: {
-        userEmail: username
+        username: username
       }
     })
   },

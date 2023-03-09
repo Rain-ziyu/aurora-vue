@@ -1,5 +1,8 @@
 <template>
   <div class="header-controls absolute top-10 right-0 flex flex-row" @keydown.k="handleOpenModel" tabindex="0">
+    <el-button type="primary" size="mini" @click="editArticle()" >
+            我也来发言
+      </el-button>
     <span class="ob-drop-shadow" data-dia="search" @click="handleOpenModel">
       <svg-icon icon-class="search" />
     </span>
@@ -403,6 +406,11 @@ export default defineComponent({
       }),
       t
     }
+  },
+  methods: {
+    editArticle() {
+      this.$router.push({ path: '/articles/list'})
+    },
   }
 })
 </script>

@@ -63,7 +63,7 @@ export default defineComponent({
     const appStore = useAppStore()
     const { t } = useI18n()
     return {
-      default: 'https://static.linhaojun.top/config/52a81cd2772167b645569342e81ce312.jpg',
+      default: 'http://prod.huayu.asia:9000/sofa-server/config/971f28ff402f8b1ee691cf7d35f512a8.ico',
       avatarClass: computed(() => {
         return {
           'ob-avatar': true,

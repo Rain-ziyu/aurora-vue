@@ -87,7 +87,7 @@ export default {
   bottom: 0;
   right: 0;
   left: 0;
-  background: url(https://static.linhaojun.top/photos/765664a8a75211296a9cd89671d6d660.png) center center / cover
+  background: url(https://prod.huayu.asia:9000/sofa-server/photos/594cd72d8bea5ef012e560101c49ad33.jpg) center center / cover
     no-repeat;
 }
 .login-card {

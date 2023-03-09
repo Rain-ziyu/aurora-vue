@@ -148,7 +148,7 @@ export default defineComponent({
     const changeSubscribe = () => {
       if (reactiveData.switchState) {
         let params = {
-          userId: userStore.userInfo.userInfoId,
+          userId: userStore.userInfo.id,
           isSubscribe: userStore.userInfo.isSubscribe
         }
         api.updateUserSubscribe(params).then(({ data }) => {

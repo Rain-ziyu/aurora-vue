@@ -277,7 +277,7 @@ export default {
   },
   methods: {
     getData() {
-      this.axios.get('/admin').then(({ data }) => {
+      this.axios.get('/admin/').then(({ data }) => {
         this.viewsCount = data.data.viewsCount
         this.messageCount = data.data.messageCount
         this.userCount = data.data.userCount

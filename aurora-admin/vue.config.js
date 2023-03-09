@@ -8,11 +8,11 @@ module.exports = defineConfig({
   productionSourceMap: false,
   devServer: {
     proxy: {
-      '/api': {
-        target: 'http://admin.huayu.asia',
+      '/admin': {
+        target: 'http://localhost:3399',
         changeOrigin: true,
         pathRewrite: {
-          '^/api': ''
+          '^/admin': '/admin'
         }
       }
     }

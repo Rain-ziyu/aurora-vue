@@ -121,7 +121,6 @@
                 <el-upload
                   class="avatar-uploader"
                   action="/admin/config/images"
-                  trigger="#pick-avatar"
                   :headers="headers"
                   :show-file-list="false"
                   :before-upload="beforeUpload"

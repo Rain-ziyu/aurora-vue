@@ -1,8 +1,8 @@
 <template>
   <div class="header-controls absolute top-10 right-0 flex flex-row" @keydown.k="handleOpenModel" tabindex="0">
-    <el-button  color="#626aef" style="width: 200px ;    opacity: 0.7;height: 45px;background-image: url('https://prod.huayu.asia:9000/sofa-server/photos/a221d59a53cbec0cd0b3587bbd98c3c4.jpg');" size="default" @click="editArticle()" >
+    <el-button class="ob-drop-shadow" color="#626aef" style="width: 200px ;    opacity: 0.7;height: 45px;background-image: url('https://prod.huayu.asia:9000/sofa-server/photos/a221d59a53cbec0cd0b3587bbd98c3c4.jpg');" size="default" @click="editArticle()" >
             我也来发言
-      </el-button>
+    </el-button>
     <span class="ob-drop-shadow" data-dia="search" @click="handleOpenModel">
       <svg-icon icon-class="search" />
     </span>

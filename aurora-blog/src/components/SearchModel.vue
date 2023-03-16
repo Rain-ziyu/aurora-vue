@@ -102,9 +102,9 @@
               </ul>
             </section>
             <section v-else>
-              <span v-if="isLoading&&keywords.length > 0"  class="flex text-3xl animation-text" style="display:flex; justify-content: center;background-image: linear-gradient(90deg, #cccccc, #0fb6d6, #cccccc)">LOADING</span>
+              <span v-if="isLoading&&keywords.length > 0"  class="flex text-3xl animation-text" style="display:flex; justify-content: center;background-image: linear-gradient(90deg, #cccccc, var(--text-accent), #cccccc)">LOADING</span>
 
-              <div v-else-if="keywords.length > 0&&isEmpty" style="text-align: center; color: #0fb6d6; height: 20px;">{{ t('settings.no-search') }}</div>
+              <div v-else-if="keywords.length > 0&&isEmpty" style="text-align: center; color: var(--text-accent); height: 20px;">{{ t('settings.no-search') }}</div>
               <div class="search-hit-label">
                 {{ t('settings.recently-search') }}
               </div>

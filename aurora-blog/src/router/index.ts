@@ -27,6 +27,20 @@ const routes = [
     component: () => import('../views/Archives.vue')
   },
   {
+    path: '/articles/list',
+    name: 'UserArticle',
+    component: () => import('../views/editArticle/ArticleList.vue')
+  },
+  {
+    path: '/articles/edit/:articleId',
+    name: 'EditArticle',
+    component: () => import('../views/editArticle/Article.vue')
+  },  {
+    path: '/articles/edit',
+    name: 'EditArticleById',
+    component: () => import('../views/editArticle/Article.vue')
+  },
+  {
     path: '/article-list/:tagId',
     name: 'ArticleList',
     component: () => import('../views/ArticleList.vue')

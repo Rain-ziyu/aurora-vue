@@ -1,6 +1,8 @@
 <template>
   <div class="header-controls absolute top-10 right-0 flex flex-row" @keydown.k="handleOpenModel" tabindex="0">
-    <el-button class="ob-drop-shadow" color="#626aef" style="width: 200px ;    opacity: 0.7;height: 45px;background-image: url('https://prod.huayu.asia:9000/sofa-server/photos/a221d59a53cbec0cd0b3587bbd98c3c4.jpg');" size="default" @click="editArticle()" >
+    <el-button class="ob-drop-shadow" color="#626aef" style="width: 200px ;    opacity: 0.7;height: 45px;
+    background-image: url('https://prod.huayu.asia:9000/sofa-server/photos/a221d59a53cbec0cd0b3587bbd98c3c4.jpg');" 
+    size="default" @click="editArticle()" >
             我也来发言
     </el-button>
     <span class="ob-drop-shadow" data-dia="search" @click="handleOpenModel">
@@ -103,6 +105,26 @@
       <span class="text" @click="returnLoginDialog">返回登录</span>
     </el-form>
   </el-dialog>
+  <el-dialog
+    v-model="articleDialogVisible"
+    title="Tips"
+    width="30%"
+    draggable
+  >
+    <span class="text">您当前处于未登录状态,发布的内容将无法绑定至账号</span>
+    <template #footer>
+      <span class="dialog-footer">
+      <el-form-item>
+        <el-button class="mx-auto mt-3" @click="handleArticleDialogClose(true)">继续发布</el-button>
+      </el-form-item>
+      <el-form-item>
+        <el-button class="mx-auto my-el-button" type="primary" @click="handleArticleDialogClose(false)">
+          先登录
+        </el-button>
+      </el-form-item>
+      </span>
+    </template>
+  </el-dialog>
   <el-dialog v-model="articlePasswordDialogVisible" width="30%" :fullscreen="isMobile">
     <el-form @submit.native.prevent @keyup.enter.native="accessArticle">
       <el-form-item model="userInfo" class="mt-5">
@@ -119,7 +141,7 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, toRef, toRefs, reactive, getCurrentInstance, nextTick } from 'vue'
+import { computed, defineComponent, toRef, toRefs, reactive, getCurrentInstance, nextTick, ref } from 'vue'
 import { Dropdown, DropdownMenu, DropdownItem } from '@/components/Dropdown'
 import { useAppStore } from '@/stores/app'
 import { useCommonStore } from '@/stores/common'
@@ -132,6 +154,7 @@ import { useSearchStore } from '@/stores/search'
 import config from '@/config/config'
 import { useI18n } from 'vue-i18n'
 import emitter from '@/utils/mitt'
+
 
 export default defineComponent({
   name: 'Controls',
@@ -163,6 +186,7 @@ export default defineComponent({
       forgetPasswordDialogVisible: false,
       articlePasswordDialogVisible: false,
       articlePassword: '',
+      articleDialogVisible: false,
       articleId: ''
     })
     emitter.on('changeArticlePasswordDialogVisible', (articleId: any) => {
@@ -173,6 +197,14 @@ export default defineComponent({
         document.getElementById('article-password-input')?.focus()
       })
     })
+    // 触发 弹窗关闭事件
+    const handleArticleDialogClose = (done: boolean) => {
+      reactiveDate.articleDialogVisible = false;
+      reactiveDate.loginDialogVisible = !done;
+      if(done){
+        router.push({ path: '/articles/list'})
+      }
+    }
     const handleClick = (name: string): void => {
       appStore.changeLocale(name)
     }
@@ -387,6 +419,7 @@ export default defineComponent({
       ...toRefs(reactiveDate),
       userInfo: toRef(userStore.$state, 'userInfo'),
       isMobile: toRef(commonStore.$state, 'isMobile'),
+      handleArticleDialogClose ,
       login,
       qqLogin,
       logout,
@@ -409,7 +442,15 @@ export default defineComponent({
   },
   methods: {
     editArticle() {
-      this.$router.push({ path: '/articles/list'})
+      let userStore = useUserStore()
+      if(userStore.userInfo==""){
+      // 如果userinfo是空 弹窗提示
+        this.articleDialogVisible = true
+
+      }else{
+        this.$router.push({ path: '/articles/list'})
+      }
+
     },
   }
 })

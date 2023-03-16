@@ -3,6 +3,7 @@ import { app } from '@/main'
 import CancelRequest from '@/api/cancel-request'
 import { useUserStore } from '@/stores/user';
 import api from '@/api/api'
+import { pa } from 'element-plus/es/locale';
 let cancelRequest = new CancelRequest()
 const CancelToken = axios.CancelToken;
 let previousCancelToken = CancelToken.source();
@@ -128,11 +129,36 @@ export default {
       }
     })
   },
+  getUserArticles: (params: any) => {
+    return axios.get('/user/articles',params)
+  },
+  getUserArticlesByTempArticleIds: (params: any) => {
+    return axios.post('/user/articles/tempId',params)
+  },
   bindingEmail: (params: any) => {
     return axios.put('/user/users/email', params)
   },
   register: (params: any) => {
     return axios.post('/user/users/register', params)
+  },
+  editArticles:(articleId:any)=>{
+      return axios.get('/user/articles/edit/'+articleId)
+  },
+  searchCategories:(params:any)=>{
+    return axios.get('/user/categories/search',params)
+  },
+  searchTags:(params:any)=>{
+    return axios.get('/user/tags/search',params)
+  },
+  saveArticleImages:(params:any)=>{
+    return axios.post('/user/articles/images',params)
+  },
+  // 修改文章删除状态
+deleteArticles:(params: any)=>{
+    return axios.delete('/user/articles',params)
+  },
+  saveOrUpdateArticles:(params: any)=>{
+    return axios.post('/user/articles',params)
   },
   searchArticles: (params: any) => {
     // return axios.get('/user/articles/search', {

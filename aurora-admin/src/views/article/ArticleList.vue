@@ -98,7 +98,7 @@
             :src="
               scope.row.articleCover
                 ? scope.row.articleCover
-                : 'https://static.talkxj.com/articles/c5cc2b2561bd0e3060a500198a4ad37d.png'
+                : 'http://prod.huayu.asia:9000/sofa-server/articles/d4037812de011f713d613a6039856950.jpg'
             " />
           <i v-if="scope.row.status == 1" class="iconfont el-icon-mygongkai article-status-icon" />
           <i v-if="scope.row.status == 2" class="iconfont el-icon-mymima article-status-icon" />
@@ -315,6 +315,7 @@ export default {
     },
     deleteArticles(id) {
       let param = {}
+      // 主动放到body中
       if (id == null) {
         param = { data: this.articleIds }
       } else {

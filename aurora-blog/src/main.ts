@@ -32,8 +32,6 @@ const pinia = createPinia()
 pinia.use(piniaPluginPersistedstate)
 export const app = createApp(App)
 for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
-  console.log(key, component);
-
   app.component(key, component)
 }
 app.use(mavonEditor)

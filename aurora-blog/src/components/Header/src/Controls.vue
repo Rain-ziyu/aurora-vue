@@ -9,9 +9,11 @@
       <svg-icon icon-class="search" />
     </span>
     <Dropdown v-if="multiLanguage === 1" @command="handleClick">
-      <span class="ob-drop-shadow" data-dia="language">
-        <svg-icon icon-class="globe" />
-        <span v-if="$i18n.locale == 'cn'">中文</span>
+      <span class="ob-drop-shadow" data-dia="language" style="    position: relative;
+    top: 50%;
+    transform: translateY(-50%);">
+        <svg-icon icon-class="globe" style="top: -1px;"/>
+        <span v-if="$i18n.locale == 'cn'" style="top: 4px;">中文</span>
         <span v-if="$i18n.locale == 'en'">EN</span>
       </span>
       <DropdownMenu>
@@ -236,16 +238,29 @@ export default defineComponent({
               // 请求完整的用户信息
               api.getCurrentUserInfo().then(({data})=>{
                 userStore.userInfo = data.data
-              proxy.$notify({
-                title: 'Success',
-                message: '登录成功',
-                type: 'success'
-              })
+                proxy.$notify({
+                  title: 'Success',
+                  message: '登录成功',
+                  type: 'success'
+                })
               // 临时的刷新  暂时可以不刷新了，因为即使登录之后页面跟登陆之前是一致的
               // location.reload()
               reactiveDate.loginDialogVisible = false
               })
-             
+            //  绑定local中的临时文章
+ 
+              let params = JSON.parse(localStorage.getItem('articleList')||'{}')
+              
+
+              api.bindingTempArticles(params).then(({data})=>{
+                if(data.result==0){
+                  proxy.$notify({
+                  title: 'Success',
+                  message: '文章绑定成功',
+                  type: 'success'
+                })
+                }
+              })
             } else {
               proxy.$notify({
                 title: 'Error',

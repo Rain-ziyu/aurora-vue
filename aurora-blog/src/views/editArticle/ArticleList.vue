@@ -10,7 +10,7 @@
     </div>
     <div class="operation-container" >
       <el-button
-      type="success"
+       type="success"
         size="small"
         @click="router.push('/articles/edit')">
         新建文章
@@ -19,7 +19,7 @@
         v-if="isDelete == 0"
         type="danger"
         size="small"
-        icon="el-icon-delete"
+        icon="Delete"
         :disabled="articleIds.length == 0"
         @click="updateIsDelete = true">
         批量删除
@@ -28,7 +28,7 @@
         v-else
         type="danger"
         size="small"
-        icon="el-icon-delete"
+        icon="Delete"
         :disabled="articleIds.length == 0"
         @click="remove = true">
         批量删除
@@ -36,7 +36,7 @@
       <el-button
         type="success"
         size="small"
-        icon="el-icon-download"
+        icon="Download"
         :disabled="articleIds.length == 0"
         style="margin-right: 1rem"
         @click="isExport = true">
@@ -45,12 +45,12 @@
       <el-upload
         action="/admin/articles/import"
         multiple
-        style="width: 100px;display:inline-block;    position: relative; top: -4px;"
+        style="width: 100px;display:inline-block;    position: relative; "
         :limit="9"
         :show-file-list="false"
         :headers="uploadHeaders"
         :on-success="uploadArticle">
-        <el-button type="primary" size="small" icon="el-icon-upload"> 批量导入 </el-button>
+        <el-button type="primary" size="small" icon="Upload"> 批量导入 </el-button>
       </el-upload>
       <div style="margin-left: auto ;vertical-align: middle;">
         <el-select 
@@ -68,7 +68,7 @@
           v-model="categoryId"
           filterable
           placeholder="请选择分类"
-          style="margin-right: 1rem; width: 180px">
+          style="margin-right: 1rem; width: 180px ;background-color: white !important;">
           <el-option label="全部" value="" />
           <el-option v-for="item in categories" :key="item.id" :label="item.categoryName" :value="item.id" />
         </el-select>
@@ -90,7 +90,7 @@
           placeholder="请输入文章名"
           style="margin-right: 1rem; width: 180px ;"
           @keyup.enter.native="searchArticles" />
-        <el-button type="primary" size="small" icon="el-icon-search" style="margin-left: 1rem" @click="searchArticles">
+        <el-button type="primary" size="small" icon="Search" style="margin-left: 1rem" @click="searchArticles">
           搜索
         </el-button>
       </div>
@@ -150,8 +150,9 @@
 
 
       <el-table-column label="操作" align="center" width="150">
-        <template v-slot="scope">
-          <el-button type="primary" size="mini" @click="editArticle(scope.row.id)" v-if="scope.row.isDelete == 0">
+        <template v-slot="scope" >
+        <div class="ops">
+          <el-button type="primary" size="mini"  @click="editArticle(scope.row.id)" v-if="scope.row.isDelete == 0">
             编辑
           </el-button>
           <el-popconfirm
@@ -159,21 +160,28 @@
             style="margin-left: 10px"
             @confirm="updateArticleDelete(scope.row.id)"
             v-if="scope.row.isDelete == 0">
-            <el-button size="mini" type="danger" slot="reference"> 删除 </el-button>
+            <template #reference>
+              <el-button size="mini" type="danger" > 删除 </el-button>
+            </template>
           </el-popconfirm>
           <el-popconfirm
             title="确定恢复吗？"
             v-if="scope.row.isDelete == 1"
             @confirm="updateArticleDelete(scope.row.id)">
-            <el-button size="mini" type="success" slot="reference"> 恢复 </el-button>
+            <template #reference>
+              <el-button size="mini" type="success" > 恢复 </el-button>
+            </template>
           </el-popconfirm>
           <el-popconfirm
             style="margin-left: 10px"
             v-if="scope.row.isDelete == 1"
             title="确定彻底删除吗？"
             @confirm="deleteArticles(scope.row.id)">
-            <el-button size="mini" type="danger" slot="reference"> 删除 </el-button>
+            <template #reference>
+              <el-button size="mini" type="danger" > 删除 </el-button>
+            </template>
           </el-popconfirm>
+        </div>
         </template>
       </el-table-column>
     </el-table>
@@ -187,29 +195,41 @@
       :total="count"
       :page-sizes="[10, 20]"
       layout="total, sizes, prev, pager, next, jumper" />
-    <el-dialog :visible.sync="updateIsDelete" width="30%">
-      <div class="dialog-title-container" slot="title"><i class="el-icon-warning" style="color: #ff9900" />提示</div>
+    <el-dialog v-model="updateIsDelete" width="30%">
+      <template #title>
+        <div class="dialog-title-container" ><i class="el-icon-warning" style="color: #ff9900" />提示</div>
+      </template>
       <div style="font-size: 1rem">是否删除选中项？</div>
-      <div slot="footer">
-        <el-button @click="updateIsDelete = false">取 消</el-button>
-        <el-button type="primary" @click="updateArticleDelete(null)"> 确 定 </el-button>
-      </div>
+      <template #footer>
+        <div >
+          <el-button @click="updateIsDelete = false">取 消</el-button>
+          <el-button type="primary" @click="updateArticleDelete(null)"> 确 定 </el-button>
+        </div>
+      </template >
     </el-dialog>
-    <el-dialog :visible.sync="remove" width="30%">
-      <div class="dialog-title-container" slot="title"><i class="el-icon-warning" style="color: #ff9900" />提示</div>
+    <el-dialog v-model="remove" width="30%">
+      <template #title>
+        <div class="dialog-title-container" ><i class="el-icon-warning" style="color: #ff9900" />提示</div>
+      </template>
       <div style="font-size: 1rem">是否彻底删除选中项？</div>
-      <div slot="footer">
+      <template #footer>
+      <div >
         <el-button @click="remove = false">取 消</el-button>
         <el-button type="primary" @click="deleteArticles(null)"> 确 定 </el-button>
       </div>
+    </template>
     </el-dialog>
-    <el-dialog :visible.sync="isExport" width="30%">
-      <div class="dialog-title-container" slot="title"><i class="el-icon-warning" style="color: #ff9900" />提示</div>
+    <el-dialog v-model="isExport" width="30%">
+      <template #title>
+      <div class="dialog-title-container"><i class="el-icon-warning" style="color: #ff9900" />提示</div>
+    </template>
       <div style="font-size: 1rem">是否导出选中文章？</div>
-      <div slot="footer">
-        <el-button @click="isExport = false">取 消</el-button>
-        <el-button type="primary" @click="exportArticles(null)"> 确 定 </el-button>
-      </div>
+      <template #footer>
+        <div >
+          <el-button @click="isExport = false">取 消</el-button>
+          <el-button type="primary" @click="exportArticles(null)"> 确 定 </el-button>
+        </div>
+      </template>
     </el-dialog>
   </el-card>
 </template>
@@ -223,6 +243,7 @@ import { useUserStore } from '../../stores/user'
 
 export default {
   created() {
+ 
     let articleStore = useArticleStore();
     this.current = articleStore.pageState.articleList
     this.listArticles()
@@ -289,7 +310,7 @@ export default {
         param.ids = this.articleIds
       }
       param.isDelete = this.isDelete == 0 ? 1 : 0
-      api.deleteArticles(param).then(({ data }) => {
+      api.updateArticleDelete(param).then(({ data }) => {
         if (data.success) {
           this.$notify.success({
             title: '成功',
@@ -312,12 +333,16 @@ export default {
       } else {
         param = { data: [id] }
       }
-      this.axios.delete('/admin/articles/delete', param).then(({ data }) => {
+      api.deleteArticles(param).then(({ data }) => {
         if (data.success) {
           this.$notify.success({
             title: '成功',
             message: data.message
           })
+          // 移除local中彻底删除的值
+          let arr = JSON.parse(localStorage.getItem('articleList')||'{}');
+          arr = arr.filter(item => param.data.indexOf(item)  == -1)
+          localStorage.setItem('articleList',JSON.stringify(arr))
           this.listArticles()
         } else {
           this.$notify.error({
@@ -415,6 +440,7 @@ export default {
     },
     listArticles() {
       if(useUserStore().userInfo==""){
+        if(JSON.parse(localStorage.getItem('articleList')||'[]').length>0){
         api.getUserArticlesByTempArticleIds({
             conditionVO:{
               current: this.current,
@@ -435,6 +461,11 @@ export default {
             }
             this.loading = false
         })
+      }else{
+        this.articles = []
+              this.count = 0
+        this.loading = false
+      }
       }
       else{
         api.getUserArticles( {
@@ -525,8 +556,14 @@ export default {
 </script>
 
 <style scoped>
+.el-button {
+  width: 90px ;
+}
 .operation-container {
   margin-top: 1.5rem;
+  display: flex;
+  align-items: center;
+  margin-bottom: 1.25rem;
 }
 .article-status-menu {
   font-size: 14px;
@@ -566,7 +603,14 @@ export default {
   right: 1rem;
   bottom: 1.4rem;
 }
-.el-button {
-    width: 150px;
+.ops .el-button {
+  width: 45px;
 }
+
+</style>
+<style >
+/* 单独控制删除弹出的气泡框 */
+.el-popconfirm__action  .el-button {  
+    width: 50px !important;
+  }
 </style>

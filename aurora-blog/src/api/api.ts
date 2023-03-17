@@ -154,11 +154,17 @@ export default {
     return axios.post('/user/articles/images',params)
   },
   // 修改文章删除状态
-deleteArticles:(params: any)=>{
-    return axios.delete('/user/articles',params)
+  updateArticleDelete:(params: any)=>{
+    return axios.put('/user/articles',params)
+  },
+  deleteArticles:(params: any)=>{
+   return axios.delete('/user/articles/delete', params)
   },
   saveOrUpdateArticles:(params: any)=>{
     return axios.post('/user/articles',params)
+  },
+  bindingTempArticles:(params: any)=>{
+    return axios.post('/user/binding/articles',params)
   },
   searchArticles: (params: any) => {
     // return axios.get('/user/articles/search', {

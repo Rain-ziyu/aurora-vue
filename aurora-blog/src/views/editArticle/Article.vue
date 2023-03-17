@@ -405,15 +405,17 @@ export default {
       })
     },
     saveTag() {
+
       if (this.tagName.trim() != '') {
-        this.addTag({params:{
+        this.addTag({
           tagName: this.tagName
-        }})
+        })
         this.tagName = ''
       }
     },
     addTag(item) {
       if (this.article.tagNames.indexOf(item.tagName) == -1) {
+        console.log(item.tagName);
         this.article.tagNames.push(item.tagName)
       }
     },
@@ -431,8 +433,10 @@ export default {
         }else{
           articleList = JSON.parse(articleList)
         }
-        articleList.push(article.id)
-        localStorage.setItem(storgeValue,JSON.stringify(articleList))
+        if(articleList.indexOf(article.id)==-1){
+          articleList.push(article.id)
+          localStorage.setItem(storgeValue,JSON.stringify(articleList))
+        }
       }
     }
   },

@@ -254,6 +254,7 @@ export default defineComponent({
 
               api.bindingTempArticles(params).then(({data})=>{
                 if(data.result==0){
+                  localStorage.removeItem('articleList')
                   proxy.$notify({
                   title: 'Success',
                   message: '文章绑定成功',

@@ -182,6 +182,9 @@ export default {
       params: params
     })
   },
+  exportArticles:(params: any)=>{
+    return axios.post('/user/articles/export', params)
+  },
   // 增加/ 用户匹配后端服务
   getWebsiteConfig: () => {
     return axios.get('/user/')

@@ -288,7 +288,7 @@ export default {
         } else {
           this.$notify.error({
             title: '失败',
-            message: '保存草稿失败'
+            message: data.message
           })
         }
       })
@@ -353,7 +353,7 @@ export default {
           } else {
             this.$notify.error({
               title: '失败',
-              message: '自动保存失败'
+              message: data.message
             })
           }
         })

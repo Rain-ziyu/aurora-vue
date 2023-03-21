@@ -43,7 +43,7 @@
         批量导出
       </el-button>
       <el-upload
-        action="/admin/articles/import"
+        action="/user/articles/import"
         multiple
         style="width: 100px;display:inline-block;    position: relative; "
         :limit="9"
@@ -360,7 +360,7 @@ export default {
       } else {
         param = [id]
       }
-      this.axios.post('/admin/articles/export', param).then(({ data }) => {
+     api.exportArticles(param).then(({ data }) => {
         if (data.success) {
           this.$notify.success({
             title: '成功',
@@ -395,6 +395,18 @@ export default {
           title: '成功',
           message: '导入成功'
         })
+        // todo:当用户是未登录的匿名发布时，保存至local
+        if(useUserStore().userInfo==""){
+          let storgeValue ="articleList"
+          let articleList = localStorage.getItem(storgeValue)
+          if(articleList==null){
+            articleList = []
+          }else{
+            articleList = JSON.parse(articleList)
+          }
+          articleList.push(data.data)
+          localStorage.setItem(storgeValue,JSON.stringify(articleList))
+        }
         this.listArticles()
       } else {
         this.$notify.error({

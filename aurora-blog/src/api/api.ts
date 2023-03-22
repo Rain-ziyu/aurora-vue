@@ -24,15 +24,15 @@ axios.interceptors.response.use(
       // 移除成功请求记录
     cancelRequest.removeRequestKey(response.config)
     switch (response.data.result) {
-      case 1:
+      case 1:{
         app.config.globalProperties.$notify({
           title: 'Error',
           message: response.data.message,
           type: 'error'
         })
         break
-      case 510:
-
+      }
+      case 510:{
         // 如果token失效直接移除，之后不携带 同步移除登录的用户信息
         localStorage.removeItem('token')
         useUserStore().userInfo =""
@@ -44,12 +44,25 @@ axios.interceptors.response.use(
           type: 'info'
         })
         break
+      }
+
     }
     return response
   },
   (error) => {
-    // 如果token失效,或者出现请求问题直接移除，之后不携带
-    localStorage.removeItem('token')
+    // 如果token失效,或者出现请求问题直接移除，之后不携带  暂不移除
+    // localStorage.removeItem('token')
+    if(error.response.data.violations!=null){
+      error.response.data.violations.forEach((element: {
+        fieldName: any; message: any; 
+      }) => {
+        app.config.globalProperties.$notify({
+          title: "参数不合法",
+          message: element.message,
+          type: 'warning'
+        })
+      });
+    }
       // 失败时也需要移除
     cancelRequest.removeRequestKey(error.config || {} )
     return Promise.reject(error)

@@ -32,6 +32,11 @@ const routes = [
     component: () => import('../views/editArticle/ArticleList.vue')
   },
   {
+    path: '/video/playback',
+    name: 'UserArticle',
+    component: () => import('../views/VideoPlayer.vue')
+  },
+  {
     path: '/articles/edit/:articleId',
     name: 'EditArticle',
     component: () => import('../views/editArticle/Article.vue')

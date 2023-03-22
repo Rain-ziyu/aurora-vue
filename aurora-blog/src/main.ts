@@ -27,6 +27,10 @@ import ElementPlus from 'element-plus'
 import zhCn from 'element-plus/dist/locale/zh-cn.mjs'
 import * as ElementPlusIconsVue from '@element-plus/icons-vue'
 import dayjs from 'dayjs'
+// main.js
+import Vue3VideoPlayer from '@cloudgeek/vue3-video-player'
+import '@cloudgeek/vue3-video-player/dist/vue3-video-player.css'
+
 
 const pinia = createPinia()
 pinia.use(piniaPluginPersistedstate)
@@ -34,6 +38,9 @@ export const app = createApp(App)
 for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
   app.component(key, component)
 }
+app.use(Vue3VideoPlayer, {
+  lang: 'zh-CN'
+})
 app.use(mavonEditor)
 app.config.globalProperties.$moment=dayjs
 app

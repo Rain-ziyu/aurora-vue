@@ -7,3 +7,4 @@ declare module '*.vue' {
 declare module "element-plus/dist/locale/zh-cn.mjs";
 declare module 'vue-avatar-cropper'
 declare module 'js-cookie'
+declare module '@cloudgeek/vue3-video-player';

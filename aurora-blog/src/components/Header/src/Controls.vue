@@ -25,7 +25,7 @@
       <span class="mr-3" @click="openLoginDialog">{{ t('settings.login') }}</span>
     </template>
     <template v-if="userInfo !== ''">
-      <Dropdown hover>
+      <Dropdown hover style="top:5px">
         <span class="mr-2">
           <div class="flex-shrink-0">
             <div class="rounded-full ring-gray-100 overflow-hidden shaodw-lg w-9">
@@ -247,21 +247,21 @@ export default defineComponent({
               // location.reload()
               reactiveDate.loginDialogVisible = false
               })
-            //  绑定local中的临时文章
- 
-              let params = JSON.parse(localStorage.getItem('articleList')||'{}')
-              
-
-              api.bindingTempArticles(params).then(({data})=>{
-                if(data.result==0){
-                  localStorage.removeItem('articleList')
-                  proxy.$notify({
-                  title: 'Success',
-                  message: '文章绑定成功',
-                  type: 'success'
+              //  绑定local中的临时文章
+              let params = JSON.parse(localStorage.getItem('articleList')||'[]')
+              if(params.length!=0){ 
+                api.bindingTempArticles(params).then(
+                  ({data})=>{
+                    if(data.result==0){
+                      localStorage.removeItem('articleList')
+                      proxy.$notify({
+                      title: 'Success',
+                      message: '文章绑定成功',
+                      type: 'success'
+                    })
+                  }
                 })
-                }
-              })
+              }
             } else {
               proxy.$notify({
                 title: 'Error',

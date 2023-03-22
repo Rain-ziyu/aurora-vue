@@ -12,11 +12,10 @@
       </el-breadcrumb>
       <div class="right-menu">
         <div class="screen-full" @click="fullScreen">
-          <i class="iconfont el-icon-myicwindowzoom48px" />
         </div>
         <el-dropdown @command="handleCommand">
           <el-avatar :size="40" :src="this.$store.state.userInfo.avatar" />
-          <i class="el-icon-caret-bottom" />
+          <i class="el-icon-caret-bottom" style="margin-left: 0.5rem"/>
           <el-dropdown-menu slot="dropdown">
             <el-dropdown-item command="setting"> <i class="el-icon-s-custom" />个人中心 </el-dropdown-item>
             <el-dropdown-item command="logout" divided>

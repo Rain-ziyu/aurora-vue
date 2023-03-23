@@ -7,11 +7,6 @@ const routes = [
     component: () => import('../views/Home.vue')
   },
   {
-    path: '/articles/:articleId',
-    name: 'Articles',
-    component: () => import('../views/Article.vue')
-  },
-  {
     path: '/talks',
     name: 'talkList',
     component: () => import('../views/TalkList.vue')
@@ -26,10 +21,11 @@ const routes = [
     name: 'Archives',
     component: () => import('../views/Archives.vue')
   },
+
   {
-    path: '/articles/list',
-    name: 'UserArticle',
-    component: () => import('../views/editArticle/ArticleList.vue')
+    path: '/articles/:articleId',
+    name: 'Articles',
+    component: () => import('../views/Article.vue')
   },
   {
     path: '/video/playback',
@@ -40,10 +36,16 @@ const routes = [
     path: '/articles/edit/:articleId',
     name: 'EditArticle',
     component: () => import('../views/editArticle/Article.vue')
-  },  {
+  }, 
+  {
     path: '/articles/edit',
     name: 'EditArticleById',
     component: () => import('../views/editArticle/Article.vue')
+  },
+  {
+    path: '/articles/edit/list',
+    name: 'UserArticle',
+    component: () => import('../views/editArticle/ArticleList.vue')
   },
   {
     path: '/article-list/:tagId',

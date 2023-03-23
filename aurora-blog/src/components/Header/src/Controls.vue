@@ -204,7 +204,7 @@ export default defineComponent({
       reactiveDate.articleDialogVisible = false;
       reactiveDate.loginDialogVisible = !done;
       if(done){
-        router.push({ path: '/articles/list'})
+        router.push({ path: '/articles/edit/list'})
       }
     }
     const handleClick = (name: string): void => {
@@ -464,7 +464,7 @@ export default defineComponent({
         this.articleDialogVisible = true
 
       }else{
-        this.$router.push({ path: '/articles/list'})
+        this.$router.push({ path: '/articles/edit/list'})
       }
 
     },

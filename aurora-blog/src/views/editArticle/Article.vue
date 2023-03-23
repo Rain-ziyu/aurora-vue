@@ -279,7 +279,7 @@ export default {
       api.saveOrUpdateArticles(this.article).then(({ data }) => {
         if (data.success) {
           this.article.id = data.data
-          this.$router.push({ path: '/articles/list' })
+          this.$router.push({ path: '/articles/edit/list' })
           this.anonymousPublishing(this.article)
           this.$notify.success({
             title: '成功',
@@ -320,7 +320,7 @@ export default {
           this.article.id = data.data
           this.anonymousPublishing(this.article)
           sessionStorage.removeItem('article')
-          this.$router.push({ path: '/articles/list' })
+          this.$router.push({ path: '/articles/edit/list' })
           this.$notify.success({
             title: '成功',
             message: data.message

@@ -48,7 +48,7 @@
         style="width: 100px;display:inline-block;    position: relative; "
         :limit="9"
         :show-file-list="false"
-        :headers="uploadHeaders"
+        :headers="uploadHeaders" 
         :on-success="uploadArticle">
         <el-button type="primary" size="small" icon="Upload"> 批量导入 </el-button>
       </el-upload>
@@ -137,14 +137,14 @@
       </el-table-column>
       <el-table-column prop="createTime" label="发表时间" width="130" align="center">
         <template v-slot="scope">
-          <i class="el-icon-time" style="margin-right: 5px" />
-          {{ scope.row.createTime | date }}
+          <el-icon style="top:2px"><Timer /></el-icon>
+          {{ dateFormat(scope.row.createTime) }}
         </template>
       </el-table-column>
       <el-table-column prop="updateTime" label="更新时间" width="130" align="center">
         <template v-slot="scope">
-          <i class="el-icon-time" style="margin-right: 5px" />
-          {{ scope.row.updateTime | date }}
+          <el-icon style="top:2px"><Timer /></el-icon>
+          {{ dateFormat(scope.row.updateTime ) }}
         </template>
       </el-table-column>
 
@@ -252,7 +252,7 @@ export default {
   },
   data: function () {
     return {
-      uploadHeaders: { token: sessionStorage.getItem('token') },
+      uploadHeaders: { token: localStorage.getItem('token') },
       loading: true,
       updateIsDelete: false,
       remove: false,
@@ -289,6 +289,13 @@ export default {
     }
   },
   methods: {
+    dateFormat(time){
+      var date = new Date(time);
+      var year = date.getFullYear();
+      var month = date.getMonth()+1;
+      var day = date.getDate();
+      return `${year}-${month}-${day}`
+    },
     selectionChange(articles) {
       this.articleIds = []
       articles.forEach((item) => {
@@ -340,9 +347,12 @@ export default {
             message: data.message
           })
           // 移除local中彻底删除的值
-          let arr = JSON.parse(localStorage.getItem('articleList')||'{}');
-          arr = arr.filter(item => param.data.indexOf(item)  == -1)
-          localStorage.setItem('articleList',JSON.stringify(arr))
+
+          let arr = JSON.parse(localStorage.getItem('articleList')||'[]');
+          if(arr.length!=0){
+              arr = arr.filter(item => param.data.indexOf(item)  == -1)
+              localStorage.setItem('articleList',JSON.stringify(arr))
+          }
           this.listArticles()
         } else {
           this.$notify.error({
@@ -420,8 +430,9 @@ export default {
       this.listArticles()
     },
     currentChange(current) {
+      let articleStore = useArticleStore();
       this.current = current
-      this.$store.commit('updateArticleListPageState', current)
+      articleStore.updateArticleListPageState( current)
       this.listArticles()
     },
     changeStatus(status) {

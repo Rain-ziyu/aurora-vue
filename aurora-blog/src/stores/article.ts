@@ -13,5 +13,10 @@ export const useArticleStore = defineStore('articleStore', {
       }
     }
   },
-  actions: {}
+
+  actions: {
+    updateArticleListPageState(current: number) {
+      this.pageState.articleList = current
+    }
+  }
 })

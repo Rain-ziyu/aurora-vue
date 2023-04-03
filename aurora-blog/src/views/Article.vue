@@ -123,7 +123,7 @@
               <transition name="fade-slide-y" mode="out-in">
                 <div class="sidebar-box mb-4">
                   <SubTitle :title="'titles.toc'" icon="toc" />
-                  <div id="toc1"></div>
+                  <div id="toc1" style="max-height: 800px;overflow: auto;"></div>
                 </div>
               </transition>
               <Navigator />

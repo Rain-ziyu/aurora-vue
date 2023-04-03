@@ -123,7 +123,7 @@
               <transition name="fade-slide-y" mode="out-in">
                 <div class="sidebar-box mb-4">
                   <SubTitle :title="'titles.toc'" icon="toc" />
-                  <div id="toc1" style="max-height: 800px;overflow: auto;"></div>
+                  <div id="toc1"></div>
                 </div>
               </transition>
               <Navigator />
@@ -476,4 +476,23 @@ export default defineComponent({
 .my-gap {
   gap: 1rem;
 }
+
+.toc-list-item .is-active-li {
+  max-height: 500px; 
+  overflow-y: auto;
+}
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background-color: #f5f5f5;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #aaa;
+  border-radius: 20px;
+  border: 2px solid #f5f5f5;
+}
+
 </style>

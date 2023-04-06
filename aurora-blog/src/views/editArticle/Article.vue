@@ -1,7 +1,11 @@
 <template>
-  <el-card class="main-card" style="opacity: 0.95;">
+  <el-card class="main-card" style="opacity: 0.95">
     <div class="article-title-container">
-      <el-input v-model="article.articleTitle" size="medium" placeholder="输入文章标题" style="background-color: white;color: white;"/>
+      <el-input
+        v-model="article.articleTitle"
+        size="medium"
+        placeholder="输入文章标题"
+        style="background-color: white; color: white" />
       <el-button
         type="danger"
         size="medium"
@@ -12,11 +16,11 @@
       </el-button>
       <el-button type="danger" size="medium" @click="openModel" style="margin-left: 10px"> 发布文章 </el-button>
     </div>
-    <mavon-editor ref="md" v-model="article.articleContent"   @imgAdd="uploadImg" style="height: calc(100vh - 260px)" />
+    <mavon-editor ref="md" v-model="article.articleContent" @imgAdd="uploadImg" style="height: calc(100vh - 260px)" />
     <el-dialog width="40%" top="15vh" v-model="addOrEdit">
-      <template  #header="{titleId,titleClass}">
+      <template #header="{ titleId, titleClass }">
         <div class="my-header">
-          <h4 :id="titleId" :class="titleClass" style="color: var(--text-normal) !important;">发布文章</h4>
+          <h4 :id="titleId" :class="titleClass" style="color: var(--text-normal) !important">发布文章</h4>
         </div>
       </template>
       <el-form label-width="80px" size="medium" :model="article">
@@ -29,7 +33,7 @@
             @close="removeCategory">
             {{ article.categoryName }}
           </el-tag>
-          <el-popover placement="bottom-start" width="460" trigger="click" v-if="!article.categoryName" >
+          <el-popover placement="bottom-start" width="460" trigger="click" v-if="!article.categoryName">
             <div class="popover-title">分类</div>
             <el-autocomplete
               style="width: 100%"
@@ -83,7 +87,7 @@
               </el-tag>
             </div>
             <template #reference>
-              <el-button type="primary" plain  size="small"> 添加标签 </el-button>
+              <el-button type="primary" plain size="small"> 添加标签 </el-button>
             </template>
           </el-popover>
         </el-form-item>
@@ -108,7 +112,7 @@
             <div class="el-upload__text" v-if="article.articleCover == ''">将文件拖到此处，或<em>点击上传</em></div>
             <img v-else :src="article.articleCover" width="360" height="180" />
           </el-upload>
-            </el-form-item>
+        </el-form-item>
         <el-form-item label="置顶">
           <el-switch
             v-model="article.isTop"
@@ -136,7 +140,7 @@
         </el-form-item>
       </el-form>
       <template v-slot:footer>
-        <div >
+        <div>
           <el-button @click="addOrEdit = false">取 消</el-button>
           <el-button type="danger" @click="saveOrUpdateArticle"> 发 表 </el-button>
         </div>
@@ -146,307 +150,325 @@
 </template>
 
 <script>
-
 import * as imageConversion from 'image-conversion'
-
+import { useRoute, useRouter, onBeforeRouteUpdate } from 'vue-router'
 import api from '@/api/api'
 import { useUserStore } from '../../stores/user'
+import { ref, nextTick, onMounted, getCurrentInstance, computed } from 'vue'
 export default {
-  created() {
-    const path = this.$route.path
+  setup() {
+    const route = useRoute()
+    const router = useRouter()
+    const ins = getCurrentInstance()
+    const path = route.path
     const arr = path.split('/')
     // 获取url中的第三部分也就是id参数
     const articleId = arr[3]
+    const addOrEdit = ref(false)
+    const autoSave = ref(true)
+    const categoryName = ref('')
+    const tagName = ref('')
+    const categorys = ref([])
+    const tagList = ref([])
+    const typeList = ref([
+      { type: 1, desc: '原创' },
+      { type: 2, desc: '转载' },
+      { type: 3, desc: '翻译' }
+    ])
+    const config = ref({
+      UPLOAD_SIZE: 10*1024
+    })
+    const article = ref({
+      id: null,
+      articleTitle: ins.appContext.config.globalProperties.$moment(new Date()).format('YYYY-MM-DD'),
+      articleContent: '',
+      articleCover: '',
+      categoryName: null,
+      tagNames: [],
+      isTop: 0,
+      type: 1,
+      status: 1
+    })
+
+    const headers = { token: sessionStorage.getItem('token') }
     if (articleId) {
       api.editArticles(articleId).then(({ data }) => {
-        this.article = data.data
+        article.value = data.data
       })
     } else {
       const article = sessionStorage.getItem('article')
       if (article) {
-        this.article = JSON.parse(article)
+        article.value = JSON.parse(article)
       }
     }
-  },
-  destroyed() {
-    this.autoSaveArticle()
-  },
-  data() {
-    return {
-      addOrEdit: false,
-      autoSave: true,
-      categoryName: '',
-      tagName: '',
-      categorys: [],
-      tagList: [],
-      typeList: [
-        {
-          type: 1,
-          desc: '原创'
-        },
-        {
-          type: 2,
-          desc: '转载'
-        },
-        {
-          type: 3,
-          desc: '翻译'
-        }
-      ],
-      config:{
-        UPLOAD_SIZE: 10
-      }
-      ,
-      article: {
-        id: null,
-        articleTitle: this.$moment(new Date()).format('YYYY-MM-DD'),
-        articleContent: '',
-        articleCover: '',
-        categoryName: null,
-        tagNames: [],
-        isTop: 0,
-        type: 1,
-        status: 1
-      },
-      headers: { token:  sessionStorage.getItem('token') }
-    }
-  },
-  methods: {
-    listCategories() {
+
+    function listCategories() {
       api.searchCategories().then(({ data }) => {
-        this.categorys = data.data
+        categorys.value = data.data
       })
-    },
-    listTags() {
+    }
+    function listTags() {
       api.searchTags().then(({ data }) => {
-        this.tagList = data.data
+        tagList.value = data.data
       })
-    },
-    openModel() {
-      if (this.article.articleTitle.trim() == '') {
+    }
+    function openModel() {
+      if (article.value.articleTitle.trim() == '') {
         this.$message.error('文章标题不能为空')
         return false
       }
-      if (this.article.articleContent.trim() == '') {
+      if (article.value.articleContent.trim() == '') {
         this.$message.error('文章内容不能为空')
         return false
       }
-      this.listCategories()
-      this.listTags()
-      this.addOrEdit = true
-    },
-    uploadCover(response) {
-      this.article.articleCover = response.data
-    },
-    beforeUpload(file) {
+      listCategories()
+      listTags()
+      addOrEdit.value = true
+    }
+    function uploadCover(response) {
+      article.value.articleCover = response.data
+    }
+    function beforeUpload(file) {
       return new Promise((resolve) => {
-        if (file.size / 1024 < this.config.UPLOAD_SIZE) {
+        if (file.size / 1024 < config.value.UPLOAD_SIZE) {
           resolve(file)
         }
-        imageConversion.compressAccurately(file, this.config.UPLOAD_SIZE).then((res) => {
+        imageConversion.compressAccurately(file, config.value.UPLOAD_SIZE).then((res) => {
           resolve(res)
         })
       })
-    },
-    uploadImg(pos, file) {
+    }
+    function uploadImg(pos, file) {
       debugger
       var formdata = new FormData()
-      if (file.size / 1024 < this.config.UPLOAD_SIZE) {
+      if (file.size / 1024 < config.value.UPLOAD_SIZE) {
         formdata.append('file', file)
         api.saveArticleImages(formdata).then(({ data }) => {
-          this.$refs.md.$img2Url(pos, data.data)
+          ins.appContext.config.globalProperties.$refs.md.$img2Url(pos, data.data)
         })
       } else {
-        imageConversion.compressAccurately(file, this.config.UPLOAD_SIZE).then((res) => {
+        imageConversion.compressAccurately(file, config.value.UPLOAD_SIZE).then((res) => {
           formdata.append('file', new window.File([res], file.name, { type: file.type }))
           api.saveArticleImages(formdata).then(({ data }) => {
-            this.$refs.md.$img2Url(pos, data.data)
+            ins.appContext.config.globalProperties.$refs.md.$img2Url(pos, data.data)
           })
         })
       }
-    },
+    }
     // 保存为草稿
-    saveArticleDraft() {
-      if (this.article.articleTitle.trim() == '') {
-        this.$message.error('文章标题不能为空')
+    function saveArticleDraft() {
+      if (article.value.articleTitle.trim() == '') {
+        ins.appContext.config.globalProperties.$message.error('文章标题不能为空')
         return false
       }
-      if (this.article.articleContent.trim() == '') {
-        this.$message.error('文章内容不能为空')
+      if (article.value.articleContent.trim() == '') {
+        ins.appContext.config.globalProperties.$message.error('文章内容不能为空')
         return false
       }
-      this.article.status = 3
-      api.saveOrUpdateArticles(this.article).then(({ data }) => {
+      article.value.status = 3
+      api.saveOrUpdateArticles(article.value).then(({ data }) => {
         if (data.success) {
-          this.article.id = data.data
-          this.$router.push({ path: '/articles/edit/list' })
-          this.anonymousPublishing(this.article)
-          this.$notify.success({
+          article.value.id = data.data
+          router.push({ path: '/articles/edit/list' })
+          anonymousPublishing(this.article)
+          ins.appContext.config.globalProperties.$notify.success({
             title: '成功',
             message: '保存草稿成功'
           })
         } else {
-          this.$notify.error({
+          ins.appContext.config.globalProperties.$notify.error({
             title: '失败',
             message: data.message
           })
         }
       })
-      this.autoSave = false
-    },
-    saveOrUpdateArticle() {
-      if (this.article.articleTitle.trim() == '') {
-        this.$message.error('文章标题不能为空')
+      autoSave.value = false
+    }
+    function saveOrUpdateArticle() {
+      if (article.value.articleTitle.trim() == '') {
+        ins.appContext.config.globalProperties.$message.error('文章标题不能为空')
         return false
       }
-      if (this.article.articleContent.trim() == '') {
-        this.$message.error('文章内容不能为空')
+      if (article.value.articleContent.trim() == '') {
+        ins.appContext.config.globalProperties.$message.error('文章内容不能为空')
         return false
       }
-      if (this.article.categoryName == null) {
-        this.$message.error('文章分类不能为空')
+      if (article.value.categoryName == null) {
+        ins.appContext.config.globalProperties.$message.error('文章分类不能为空')
         return false
       }
-      if (this.article.tagNames.length == 0) {
-        this.$message.error('文章标签不能为空')
+      if (article.value.tagNames.length == 0) {
+        ins.appContext.config.globalProperties.$message.error('文章标签不能为空')
         return false
       }
-      if (this.article.articleCover.trim() == '') {
-        this.$message.error('文章封面不能为空')
+      if (article.value.articleCover.trim() == '') {
+        ins.appContext.config.globalProperties.$message.error('文章封面不能为空')
         return false
       }
-      api.saveOrUpdateArticles(this.article).then(({ data }) => {
+      api.saveOrUpdateArticles(article.value).then(({ data }) => {
         if (data.success) {
-          this.article.id = data.data
-          this.anonymousPublishing(this.article)
+          article.value.id = data.data
+          anonymousPublishing(article.value)
           sessionStorage.removeItem('article')
-          this.$router.push({ path: '/articles/edit/list' })
-          this.$notify.success({
+          router.push({ path: '/articles/edit/list' })
+          ins.appContext.config.globalProperties.$notify.success({
             title: '成功',
             message: data.message
           })
         } else {
-          this.$notify.error({
+          ins.appContext.config.globalProperties.$notify.error({
             title: '失败',
             message: data.message
           })
         }
-        this.addOrEdit = false
+        addOrEdit.value = false
       })
-      this.autoSave = false
-    },
-    autoSaveArticle() {
+      autoSave.value = false
+    }
+    function autoSaveArticle() {
       if (
-        this.autoSave &&
-        this.article.articleTitle.trim() != '' &&
-        this.article.articleContent.trim() != '' &&
-        this.article.id != null
+        autoSave.value &&
+        article.value.articleTitle.trim() != '' &&
+        article.value.articleContent.trim() != '' &&
+        article.value.id != null
       ) {
-        api.saveOrUpdateArticles(this.article).then(({ data }) => {
+        api.saveOrUpdateArticles(article.value).then(({ data }) => {
           if (data.success) {
-            this.article.id = data.data
-            this.anonymousPublishing(this.article)
-            this.$notify.success({
+            article.value.id = data.data
+            anonymousPublishing(article.value)
+            ins.appContext.config.globalProperties.$notify.success({
               title: '成功',
               message: '自动保存成功'
             })
           } else {
-            this.$notify.error({
+            ins.appContext.config.globalProperties.$notify.error({
               title: '失败',
               message: data.message
             })
           }
         })
       }
-      if (this.autoSave && this.article.id == null) {
-        sessionStorage.setItem('article', JSON.stringify(this.article))
+      if (autoSave.value && article.value.id == null) {
+        sessionStorage.setItem('article', JSON.stringify(article.value))
       }
-    },
-    searchCategories(keywords, cb) {
-      let params= {
-            keywords: keywords
-          }
-      api.searchCategories(params)
-        .then(({ data }) => {
-          cb(data.data)
-        })
-    },
-    handleSelectCategories(item) {
-      this.addCategory({
+    }
+    function searchCategories(keywords, cb) {
+      let params = {
+        keywords: keywords
+      }
+      api.searchCategories(params).then(({ data }) => {
+        cb(data.data)
+      })
+    }
+    function handleSelectCategories(item) {
+      addCategory({
         categoryName: item.categoryName
       })
-    },
-    saveCategory() {
-      if (this.categoryName.trim() != '') {
-        this.addCategory({
+    }
+    function saveCategory() {
+      if (categoryName.value.trim() != '') {
+        addCategory({
           categoryName: this.categoryName
         })
-        this.categoryName = ''
+        categoryName.value = ''
       }
-    },
-    addCategory(item) {
-      this.article.categoryName = item.categoryName
-    },
-    removeCategory() {
-      this.article.categoryName = null
-    },
-    searchTags(keywords, cb) {
-      api.searchTags({params:{
+    }
+    function addCategory(item) {
+      article.value.categoryName = item.categoryName
+    }
+    function removeCategory() {
+      article.value.categoryName = null
+    }
+    function searchTags(keywords, cb) {
+      api
+        .searchTags({
+          params: {
             keywords: keywords
-          }}
-        )
+          }
+        })
         .then(({ data }) => {
           cb(data.data)
         })
-    },
-    handleSelectTag(item) {
-      this.addTag({
+    }
+    function handleSelectTag(item) {
+      addTag({
         tagName: item.tagName
       })
-    },
-    saveTag() {
-
-      if (this.tagName.trim() != '') {
-        this.addTag({
-          tagName: this.tagName
+    }
+    function saveTag() {
+      if (tagName.value.trim() != '') {
+        addTag({
+          tagName: tagName.value
         })
-        this.tagName = ''
+        tagName.value = ''
       }
-    },
-    addTag(item) {
-      if (this.article.tagNames.indexOf(item.tagName) == -1) {
-        console.log(item.tagName);
-        this.article.tagNames.push(item.tagName)
+    }
+    function addTag(item) {
+      if (article.value.tagNames.indexOf(item.tagName) == -1) {
+        console.log(item.tagName)
+        article.value.tagNames.push(item.tagName)
       }
-    },
-    removeTag(item) {
-      const index = this.article.tagNames.indexOf(item)
-      this.article.tagNames.splice(index, 1)
-    },
-    anonymousPublishing(article){
+    }
+    function removeTag(item) {
+      const index = article.value.tagNames.indexOf(item)
+      article.value.tagNames.splice(index, 1)
+    }
+    function anonymousPublishing(article) {
       // todo:当用户是未登录的匿名发布时，保存至local
-      if(useUserStore().userInfo==""){
-        let storgeValue ="articleList"
+      if (useUserStore().userInfo == '') {
+        let storgeValue = 'articleList'
         let articleList = localStorage.getItem(storgeValue)
-        if(articleList==null){
+        if (articleList == null) {
           articleList = []
-        }else{
+        } else {
           articleList = JSON.parse(articleList)
         }
-        if(articleList.indexOf(article.id)==-1){
+        if (articleList.indexOf(article.id) == -1) {
           articleList.push(article.id)
-          localStorage.setItem(storgeValue,JSON.stringify(articleList))
+          localStorage.setItem(storgeValue, JSON.stringify(articleList))
         }
       }
     }
-  },
-  computed: {
-    tagClass() {
-      return function (item) {
+    function tagClass(item) {
         const index = this.article.tagNames.indexOf(item.tagName)
         return index != -1 ? 'tag-item-select' : 'tag-item'
       }
+    return{
+      listCategories,
+      listTags,
+      openModel,
+      uploadCover,
+      beforeUpload,
+      uploadImg,
+      saveArticleDraft,
+      saveOrUpdateArticle,
+      autoSaveArticle,
+      searchCategories,
+      handleSelectCategories,
+      saveCategory,
+      addCategory,
+      removeCategory,
+      searchTags,
+      handleSelectTag,
+      saveTag,
+      addTag,
+      removeTag,
+      anonymousPublishing,
+      headers,
+      article,
+      config,
+      typeList,
+       addOrEdit,
+     autoSave ,
+     categoryName ,
+     tagName,
+     categorys,
+     tagList,
+     tagClass
     }
+  },
+  destroyed() {
+    this.autoSaveArticle()
   }
 }
 </script>
@@ -491,13 +513,12 @@ export default {
   height: 260px;
   overflow-y: auto;
 }
-.el-button{
-  width: 70px
+.el-button {
+  width: 70px;
 }
-
 </style>
 <style >
-.el-upload{
+.el-upload {
   --el-upload-dragger-padding-horizontal: 0px !important;
   --el-upload-dragger-padding-vertical: 0px;
 }

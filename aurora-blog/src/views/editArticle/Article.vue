@@ -106,7 +106,7 @@
             :on-success="uploadCover">
             <i class="el-icon-upload" v-if="article.articleCover == ''" />
             <div class="el-upload__text" v-if="article.articleCover == ''">将文件拖到此处，或<em>点击上传</em></div>
-            <img v-else :src="article.articleCover" width="360px" height="180px" />
+            <img v-else :src="article.articleCover" width="360" height="180" />
           </el-upload>
             </el-form-item>
         <el-form-item label="置顶">
@@ -171,7 +171,7 @@ export default {
   destroyed() {
     this.autoSaveArticle()
   },
-  data: function () {
+  data() {
     return {
       addOrEdit: false,
       autoSave: true,
@@ -493,5 +493,12 @@ export default {
 }
 .el-button{
   width: 70px
+}
+
+</style>
+<style >
+.el-upload{
+  --el-upload-dragger-padding-horizontal: 0px !important;
+  --el-upload-dragger-padding-vertical: 0px;
 }
 </style>

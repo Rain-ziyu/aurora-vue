@@ -352,11 +352,11 @@ export default {
         sessionStorage.setItem('article', JSON.stringify(article.value))
       }
     }
-    function searchCategories(keywords, cb) {
+    function searchCategories(queryString, cb) {
       let params = {
-        keywords: keywords
+        keywords: queryString
       }
-      api.searchCategories(params).then(({ data }) => {
+      api.searchCategories({params: params}).then(({ data }) => {
         cb(data.data)
       })
     }
@@ -368,7 +368,7 @@ export default {
     function saveCategory() {
       if (categoryName.value.trim() != '') {
         addCategory({
-          categoryName: this.categoryName
+          categoryName: categoryName
         })
         categoryName.value = ''
       }

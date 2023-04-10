@@ -290,11 +290,16 @@ export default {
   },
   methods: {
     dateFormat(time){
-      var date = new Date(time);
-      var year = date.getFullYear();
-      var month = date.getMonth()+1;
-      var day = date.getDate();
-      return `${year}-${month}-${day}`
+      if(time!==null){
+        var date = new Date(time);
+        var year = date.getFullYear();
+        var month = date.getMonth()+1;
+        var day = date.getDate();
+        return `${year}-${month}-${day}`
+      }else{
+        return '-'
+      }
+
     },
     selectionChange(articles) {
       this.articleIds = []
